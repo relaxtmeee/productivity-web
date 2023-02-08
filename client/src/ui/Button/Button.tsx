@@ -1,9 +1,9 @@
 import styles from './Button.module.css';
 import { IButton } from './Button.interface';
 
-const Button = ({children} : IButton) => {
+const Button = ({children, ...props} : IButton) => {
     return (
-        <button className={styles.button}>
+        <button {...props} className={styles.button}>
             {children}
         </button>
     );

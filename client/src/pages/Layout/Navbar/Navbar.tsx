@@ -3,6 +3,9 @@ import styles from "./Navbar.module.css";
 import Button from "../../../ui/Button/Button";
 
 const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
+
+    const user = false;
+
     return (
         <nav className={styles.nav} {...props}>
             <div className={styles.logo}>
@@ -23,12 +26,18 @@ const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
                 </li>
             </ul>
             <div className={styles.user}>
-                <div className={styles.name}>
-                    username
-                </div>
-                <Button>
-                    Выйти
-                </Button>
+                {user ? 
+                    <>
+                        <div className={styles.name}>
+                            username
+                        </div>
+                        <Button>
+                            Выйти
+                        </Button> 
+                    </>
+                    : 
+                    <Button>Войти</Button>
+                }
             </div>
         </nav>
     );

@@ -1,8 +1,16 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useTypedSelector } from '../../../../store/selectorTypedHook';
+import { AppDispatch } from '../../../../store/store';
 import Button from '../../../../ui/Button/Button';
 import HTag from '../../../../ui/Htag/HTag';
 import Input from '../../../../ui/Input/Input';
 import PTag from '../../../../ui/PTag/PTag';
+import { login, registration } from '../services/userAPI';
+import { fetchedUser, fetchingUser, fetchUser } from '../services/userSlice';
+
+
 import styles from './AuthForm.module.css';
 
 const AuthForm = () => {
@@ -10,6 +18,26 @@ const AuthForm = () => {
     const [register, setRegister] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    
+   
+    const sing = async () => {
+        try {
+            dispatch(fetchingUser());
+            if (register) {
+                const response = await registration(email, password);
+                dispatch(fetchUser(response));
+
+            } else {
+                const response = await login(email, password);
+                dispatch(fetchUser(response));
+            }
+            navigate('/');
+        } catch (error) {
+            dispatch(fetchedUser());
+        }
+    }
 
     return (
         <div className={styles.form}>
@@ -37,7 +65,7 @@ const AuthForm = () => {
                         У вас нет аккаунта? <span onClick={() => setRegister(true)} className={styles.swap}>Зарегистрироваться</span>
                     </PTag>
                 }
-                <Button>{register ? 'Зарегистрироваться' : 'Войти'}</Button>
+                <Button onClick={sing}>{register ? 'Зарегистрироваться' : 'Войти'}</Button>
             </div>
 
         </div>
@@ -45,3 +73,7 @@ const AuthForm = () => {
 };
 
 export default AuthForm;
+
+function jwt_decode(token: any) {
+    throw new Error('Function not implemented.');
+}

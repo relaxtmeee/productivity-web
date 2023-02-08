@@ -6,9 +6,9 @@ import Posts from "./modules/components/Posts/Posts";
 const MainPage: React.FC = () => {
 
     return (
-        <div>
+        <>
             <Posts />
-        </div>
+        </>
     );
 };
 

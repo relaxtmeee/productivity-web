@@ -1,17 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useTypedSelector } from "../../../../../store/selectorTypedHook";
+import { fetchPosts } from "./postsSlice";
+import { AppDispatch } from "../../../../../store/store";
 import HTag from "../../../../../ui/Htag/HTag";
 import PTag from "../../../../../ui/PTag/PTag";
-import { IPost } from "../../interfaces/Posts.interface";
-import { getPost } from "../../services/http.posts";
 import styles from "./Posts.module.css";
 
 const Posts: React.FC = ():JSX.Element => {
 
-    const [posts, setPosts] = useState<IPost[]>();
+    const posts = useTypedSelector(state => state.posts.posts)
+    const postLoading = useTypedSelector(state => state.posts.postsLoadingStatus);
+
+    const dispatch = useDispatch<AppDispatch>();
+
 
     useEffect(() => {
-        getPost().then(data => setPosts(data?.sort((a, b) => a.id < b.id ? 1 : -1)));
+        dispatch(fetchPosts());
     }, [])
+    
+
+    if(postLoading !== 'idle') {
+        return <></>
+    } else {
+
+    }
+    
     
     return (
         <div className={styles.posts}>
