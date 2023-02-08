@@ -1,0 +1,74 @@
+.form {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 600px;
+    margin: 0 auto;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    background: #667469;
+    box-shadow: 0 20px 50px 2px var(--border);
+}
+
+.agree {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-items: flex-start;
+    margin-top: 20px;
+}
+
+.agree > input {
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.agree > label {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background: var(--main);
+    position: relative;
+}
+
+.agree > input:checked + label {
+    background-image: url('./agree.svg');
+    background-size: cover;
+}
+
+.submit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.swap {
+    cursor: pointer;
+    color: var(--border-hover);
+    border-bottom: 3px solid var(--border-hover);
+    border-radius: 5px;
+}
+
+/* .form > h2 {
+    transform: translateZ(10px);
+}
+
+.form > input:hover, input:focus {
+    transform: translateZ(20px);
+}
+
+
+.form > button:hover, button:focus {
+    transform: translateZ(20px);
+}
+
+.form > button:active {
+    transform: translateZ(0);
+} */
