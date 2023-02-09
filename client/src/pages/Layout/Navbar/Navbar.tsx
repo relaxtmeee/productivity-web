@@ -1,11 +1,30 @@
 import { INavbar } from "./Navbar.props";
 import styles from "./Navbar.module.css";
 import Button from "../../../ui/Button/Button";
+import { useTypedSelector } from "../../../store/selectorTypedHook";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store/store";
+import { fetchUser } from "../../AuthPage/modules/services/userSlice";
 
 const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
 
-    const user = false;
+    const user = useTypedSelector(state => state.user.auth);
+    const userEmail = useTypedSelector(state => state.user.user?.email);
+    const dispath = useDispatch<AppDispatch>();
 
+    const navigate = useNavigate();
+
+    const logIn = () => {
+        navigate('/auth');
+    }
+
+    const logOut = () => {
+        dispath(fetchUser({user: {}, auth: false}));
+        localStorage.removeItem('token');
+        navigate('/auth');
+    }
+    
     return (
         <nav className={styles.nav} {...props}>
             <div className={styles.logo}>
@@ -29,14 +48,14 @@ const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
                 {user ? 
                     <>
                         <div className={styles.name}>
-                            username
+                            {userEmail}
                         </div>
-                        <Button>
+                        <Button onClick={logOut}>
                             Выйти
                         </Button> 
                     </>
                     : 
-                    <Button>Войти</Button>
+                    <Button onClick={logIn}>Войти</Button>
                 }
             </div>
         </nav>

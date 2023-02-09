@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useTypedSelector } from '../../../../store/selectorTypedHook';
 import { AppDispatch } from '../../../../store/store';
 import Button from '../../../../ui/Button/Button';
 import HTag from '../../../../ui/Htag/HTag';
@@ -15,7 +14,7 @@ import styles from './AuthForm.module.css';
 
 const AuthForm = () => {
 
-    const [register, setRegister] = useState(true);
+    const [register, setRegister] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -27,13 +26,14 @@ const AuthForm = () => {
             dispatch(fetchingUser());
             if (register) {
                 const response = await registration(email, password);
-                dispatch(fetchUser(response));
+                dispatch(fetchUser({user: response, auth: true}));
+                navigate('/');
 
             } else {
                 const response = await login(email, password);
-                dispatch(fetchUser(response));
+                dispatch(fetchUser({user: response, auth: true}));
+                navigate('/');
             }
-            navigate('/');
         } catch (error) {
             dispatch(fetchedUser());
         }
@@ -73,7 +73,3 @@ const AuthForm = () => {
 };
 
 export default AuthForm;
-
-function jwt_decode(token: any) {
-    throw new Error('Function not implemented.');
-}

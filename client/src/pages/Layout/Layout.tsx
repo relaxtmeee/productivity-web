@@ -1,23 +1,56 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import styles from './Layout.module.css';
 import { ILayout } from "./Layout.interface";
 import Footer from "./Footer/Footer";
 import Navbar from "./Navbar/Navbar";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/store";
+import { check } from "../AuthPage/modules/services/userAPI";
+import { fetchedUser, fetchingUser, fetchUser } from "../AuthPage/modules/services/userSlice";
+import Spinner from "../../ui/Spinner/Spinner";
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const Layout = ({children}: ILayout):JSX.Element => {
 
-    return (
-        <div className={styles.wrapper}>
-            <Navbar />
-            <main 
-                role='main'
-                className={styles.body}
+    const [loading, setLoading] = useState(true);
 
-            >
-                {children}
-            </main>
-            <Footer className={styles.footer}/>
-        </div>
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        check()
+            .then((data) => {
+                dispatch(fetchingUser());
+                dispatch(fetchUser({user: data, auth: true}));
+            })
+            .catch(() => {
+                dispatch(fetchedUser());
+            })
+            .finally(() => {
+                setLoading(false)
+            })
+    }, [])
+
+    if(loading) {
+        return <>
+            <Spinner/>
+        </>
+    }
+
+    return (
+        <Router>
+            <div className={styles.wrapper}>
+                <Navbar />
+                <main 
+                    role='main'
+                    className={styles.body}
+
+                >
+                    {children}
+                </main>
+                <Footer className={styles.footer}/>
+            </div>
+        </Router>
+ 
     )
 }
 

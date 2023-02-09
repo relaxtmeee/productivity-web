@@ -27,10 +27,6 @@ a {
     text-decoration: none;
 }
 
-.App {
-    perspective: 500px;
-}
-
 :root {
     /* --main: #9E250E; */
     --main: #a1ffb5;
