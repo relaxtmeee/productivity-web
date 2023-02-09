@@ -1,0 +1,23 @@
+.textarea {
+    resize: none;
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    color: var(--main);
+    background: var(--bg-input);
+    transition: all 0.3s;
+    outline: none;
+    border: 2px solid var(--border);
+    box-shadow: 0 0 10px 2px var(--border-hover);
+    width: 100%;
+}
+
+.textarea::placeholder {
+    color: var(--main);
+}
+
+.textarea:hover, .textarea:active, .textarea:focus {
+    border: 2px solid var(--border-hover);
+    box-shadow: 0 0 10px 5px  var(--border);
+}

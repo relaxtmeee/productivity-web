@@ -5,7 +5,8 @@ import { useTypedSelector } from "../../../store/selectorTypedHook";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store/store";
-import { fetchUser } from "../../AuthPage/modules/services/userSlice";
+import { fetchUser } from "../../../store/userSlice";
+import { NavLink } from "react-router-dom";
 
 const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
 
@@ -28,11 +29,13 @@ const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
     return (
         <nav className={styles.nav} {...props}>
             <div className={styles.logo}>
-                MyWeb
+                <NavLink to={'/'}>
+                    MyWeb
+                </NavLink>
             </div>
             <ul className={styles.links}>
                 <li className={styles.link}>
-                    <a href="#">Blog</a>
+                    <NavLink to={'/posts'}>Blog</NavLink>
                 </li>
                 <li className={styles.link}>
                     <a href="#">Todo</a>

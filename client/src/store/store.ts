@@ -1,8 +1,6 @@
-import { AnyAction, configureStore, ThunkMiddleware } from '@reduxjs/toolkit';
-import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
-import { IUser } from '../pages/AuthPage/modules/services/userSlice';
-import posts, { IPosts } from '../pages/MainPage/modules/components/Posts/postsSlice';
-import user from '../pages/AuthPage/modules/services/userSlice';
+import { configureStore } from '@reduxjs/toolkit';
+import posts from './postsSlice';
+import user from './userSlice';
 
 const stringMiddleware = () => (next:any) => (action:any) => {
     if (typeof action === 'string') {

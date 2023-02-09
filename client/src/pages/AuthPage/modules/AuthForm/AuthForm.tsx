@@ -7,7 +7,7 @@ import HTag from '../../../../ui/Htag/HTag';
 import Input from '../../../../ui/Input/Input';
 import PTag from '../../../../ui/PTag/PTag';
 import { login, registration } from '../services/userAPI';
-import { fetchedUser, fetchingUser, fetchUser } from '../services/userSlice';
+import { fetchedUser, fetchingUser, fetchUser } from '../../../../store/userSlice';
 
 
 import styles from './AuthForm.module.css';
@@ -17,17 +17,24 @@ const AuthForm = () => {
     const [register, setRegister] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [checked, setChecked] = useState(false);
+
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
-    
    
     const sing = async () => {
         try {
             dispatch(fetchingUser());
             if (register) {
-                const response = await registration(email, password);
-                dispatch(fetchUser({user: response, auth: true}));
-                navigate('/');
+
+                if(checked) {
+                    const response = await registration(email, password);
+                    dispatch(fetchUser({user: response, auth: true}));
+                    navigate('/');
+                } else {
+                    console.log('вы не подтвердили обработку данных');
+                }
+               
 
             } else {
                 const response = await login(email, password);
@@ -43,12 +50,12 @@ const AuthForm = () => {
         <div className={styles.form}>
             <HTag htag='h2'>{register ? 'Зарегистрироваться' : 'Войти'}</HTag>
             <Input value={email} onChange={(event) => setEmail(event.target.value)} placeholder='Введите вашу почту'/>
-            <Input value={password} onChange={(event) => setPassword(event.target.value)} placeholder='Введите ваш пароль'/>
+            <Input type='password' value={password} onChange={(event) => setPassword(event.target.value)} placeholder='Введите ваш пароль'/>
             {register 
             ? 
                 <div className={styles.agree}>
                     <PTag size='14'>Подтверждаю согласие на обработку данных</PTag> 
-                    <input id='check' type='checkbox'/>
+                    <input onChange={() => setChecked(!checked)} id='check' type='checkbox'/>
                     <label htmlFor="check"></label>
                 </div> 
                 :

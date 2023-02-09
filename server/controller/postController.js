@@ -1,3 +1,4 @@
+const ApiError = require('../error/ApiError');
 const { Post } = require('../models/models');
 
 class PostController {
@@ -9,7 +10,7 @@ class PostController {
 
     async getAll (req, res, next) {
         const { userId } = req.query;
-        console.log(userId);
+
         const post = await Post.findAll({where: {userId}});
         return res.json(post);
     }

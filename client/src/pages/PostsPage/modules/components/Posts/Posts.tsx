@@ -1,27 +1,32 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../../../store/selectorTypedHook";
-import { fetchPosts } from "./postsSlice";
+import { fetchPosts } from "../../../../../store/postsSlice";
 import { AppDispatch } from "../../../../../store/store";
 import HTag from "../../../../../ui/Htag/HTag";
 import PTag from "../../../../../ui/PTag/PTag";
 import styles from "./Posts.module.css";
+import Spinner from "../../../../../ui/Spinner/Spinner";
+import PostCreate from "../PostCreate/PostCreate";
 
 const Posts: React.FC = ():JSX.Element => {
 
     const posts = useTypedSelector(state => state.posts.posts)
     const postLoading = useTypedSelector(state => state.posts.postsLoadingStatus);
-
+    const userId = useTypedSelector(state => state.user.user?.id);
     const dispatch = useDispatch<AppDispatch>();
 
-
     useEffect(() => {
-        dispatch(fetchPosts());
+        if(typeof userId != "undefined" ) {
+            dispatch(fetchPosts(userId));
+        }
     }, [])
     
 
     if(postLoading !== 'idle') {
-        return <></>
+        return <>
+            <Spinner/>
+        </>
     } else {
 
     }
@@ -29,6 +34,7 @@ const Posts: React.FC = ():JSX.Element => {
     
     return (
         <div className={styles.posts}>
+            <PostCreate/>
             {posts && posts.map((post) => {
                 return (
                 <div key={post.id} className={styles.post}>

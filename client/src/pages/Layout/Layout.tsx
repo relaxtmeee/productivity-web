@@ -6,7 +6,7 @@ import Navbar from "./Navbar/Navbar";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
 import { check } from "../AuthPage/modules/services/userAPI";
-import { fetchedUser, fetchingUser, fetchUser } from "../AuthPage/modules/services/userSlice";
+import { fetchedUser, fetchingUser, fetchUser } from "../../store/userSlice";
 import Spinner from "../../ui/Spinner/Spinner";
 import { BrowserRouter as Router } from 'react-router-dom';
 

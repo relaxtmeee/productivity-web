@@ -1,9 +1,9 @@
 export interface IPost {
-    id: number;
+    id?: number;
     name: string;
     description: string;
     date: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
     userId: number
 }

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IPost } from "../../interfaces/Posts.interface";
-import { getPost } from "../../services/http.posts";
+import { IPost } from "../pages/PostsPage/modules/interfaces/Posts.interface";
+import { getPost } from "../pages/PostsPage/modules/services/http.posts";
 
 
 export interface IPosts {
@@ -15,16 +15,15 @@ const initialState = {
 
 export const fetchPosts = createAsyncThunk(
     'posts/fetchPosts',
-    async (thunkAPI) => {
-        return await getPost();
+    async (userId: number | undefined) => {
+        return await getPost(userId);
     }
 )
 
 const postsSlice = createSlice({
     name: 'posts',
     initialState,
-    reducers: {// fetchPosts: (state, action)  => {state.posts = action.payload},
-},
+    reducers: {},
     extraReducers: (builder) => {
         builder 
             .addCase(fetchPosts.pending, state => {state.postsLoadingStatus =  'pending'})

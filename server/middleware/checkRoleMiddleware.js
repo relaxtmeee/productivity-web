@@ -8,6 +8,7 @@ module.exports = function (role) {
             next();
         }
         try {
+            console.log(req.headers.authorization);
             const token = req.headers.authorization.split(' ')[1]; // Bearer aahqrtheqgr
             if (!token) {
                 return res.status(401).json({message: 'Пользователь не авторизован'})

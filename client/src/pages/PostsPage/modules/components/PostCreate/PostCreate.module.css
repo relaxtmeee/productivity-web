@@ -1,0 +1,13 @@
+.create {
+    max-width: 600px;
+}
+
+.create > textarea {
+    height: 150px;
+}
+
+.create > button {
+    position: relative;
+    left: 100%;
+    transform: translate(-100%);
+}
