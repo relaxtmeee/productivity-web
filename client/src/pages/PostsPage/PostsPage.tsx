@@ -1,6 +1,6 @@
 import Posts from "./modules/components/Posts/Posts";
 
-const PostPage: React.FC = () => {
+const PostsPage: React.FC = () => {
 
     return (
         <>
@@ -9,4 +9,4 @@ const PostPage: React.FC = () => {
     );
 };
 
-export default PostPage;
+export default PostsPage;

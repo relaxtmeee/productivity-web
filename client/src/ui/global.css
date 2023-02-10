@@ -11,7 +11,7 @@
 }
 
 body {
-    background: rgb(134, 158, 139);
+    background: var(--bg-body);
     min-height: 100vh;
 }
 
@@ -29,11 +29,14 @@ a {
 
 :root {
     /* --main: #9E250E; */
+    --bg-body: #869e8b;
     --main: #a1ffb5;
     --border: #465627;
     --border-hover: #a0b37a;
     --background: #6a921a; 
-    --blue: #407AEB; 
-    --dark-blue: #4A669E;
     --bg-input: #657769;
+    --warning: #ca9d4a;
+    --warning-text: #443d2d;
+    --warning-border: #897246;
+    --warning-border-hover: #b69b68;;
 }

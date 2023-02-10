@@ -6,7 +6,7 @@ const router = new Router();
 
 router.post('/', postController.create);
 router.get('/', checkCurrentUserMiddleware() ,postController.getAll);
-router.get('/:id', postController.getOne);
-router.delete('/', postController.deleteOne);
+router.get('/:id', checkCurrentUserMiddleware() , postController.getOne);
+router.delete('/:id', postController.deleteOne);
 
 module.exports = router;

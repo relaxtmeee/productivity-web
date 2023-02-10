@@ -10,7 +10,6 @@ class PostController {
 
     async getAll (req, res, next) {
         const { userId } = req.query;
-
         const post = await Post.findAll({where: {userId}});
         return res.json(post);
     }

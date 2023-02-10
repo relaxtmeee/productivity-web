@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 export interface IUser {
-    user: { email: string, exp?: number; iat?: number, id: number, role: string } | undefined;
+    user: { email: string, exp?: number; iat?: number, id: string, role: string } | undefined;
     auth: boolean,
     userLoadingStatus: 'idle' | 'pending' | 'succeeded' | 'failed';
 }

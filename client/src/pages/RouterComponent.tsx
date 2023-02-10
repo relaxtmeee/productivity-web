@@ -2,15 +2,17 @@ import { Routes, Route } from "react-router-dom";
 import AuthPage from "./AuthPage/AuthPage";
 import MainPage from "./MainPage/MainPage";
 import { withLayout } from "./Layout/Layout";
-import PostPage from "./PostsPage/PostsPage";
+import PostsPage from "./PostsPage/PostsPage";
+import PostPage from "./PostPage/PostPage";
 
 const RouterComponent = ():JSX.Element => {
 
     return (
         <Routes>
-            <Route path="/" element={<MainPage/>}/>
+            <Route path="/posts/:postId" element={<PostPage/>}/>
+            <Route path="/posts" element={<PostsPage/>}/>
             <Route path="/auth" element={<AuthPage/>}/>
-            <Route path="/posts" element={<PostPage/>}/>
+            <Route path="/" element={<MainPage/>}/>
         </Routes>
     );
 };

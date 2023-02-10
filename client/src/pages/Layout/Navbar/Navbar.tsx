@@ -54,11 +54,11 @@ const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
                             {userEmail}
                         </div>
                         <Button onClick={logOut}>
-                            Выйти
+                            Log out
                         </Button> 
                     </>
                     : 
-                    <Button onClick={logIn}>Войти</Button>
+                    <Button onClick={logIn}>Log in</Button>
                 }
             </div>
         </nav>

@@ -1,0 +1,13 @@
+.post {
+    width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: var(--bg-input);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px var(--border-hover);
+}
+
+.heading {
+    align-self: center;
+}
