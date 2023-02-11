@@ -10,14 +10,16 @@ import Spinner from "../../../../../ui/Spinner/Spinner";
 import PostCreate from "../PostCreate/PostCreate";
 import Button from "../../../../../ui/Button/Button";
 import { NavLink } from "react-router-dom";
+import ErrorMessage from "../../../../../ui/Error/Error";
 
 const Posts: React.FC = ():JSX.Element => {
 
     const [open, setOpen] = useState<boolean>(false);
-    const posts = useTypedSelector(state => state.posts.posts);
+    
 
     const postLoading = useTypedSelector(state => state.posts.postsLoadingStatus);
     const userId = useTypedSelector(state => state.user.user?.id);
+
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
@@ -27,21 +29,38 @@ const Posts: React.FC = ():JSX.Element => {
     }, [])
     
 
-    if(postLoading !== 'idle') {
+    if(postLoading === 'pending') {
         return <>
             <Spinner/>
         </>
     } 
+
+    if(postLoading === 'failed') {
+        return <ErrorMessage />
+    }
     
     return (
         <div className={styles.posts}>
             {open ? <PostCreate setOpen={setOpen}/> : null}
-            <div className={styles.add}>
-                <PTag size="18" className={styles.add_text}>
-                    Do you want to share your thoughts?
-                </PTag>
-                <Button onClick={() => setOpen(true)}>Add article</Button>
-            </div>
+                <div className={styles.add}>
+                    <PTag size="18" className={styles.add_text}>
+                        Do you want to share your thoughts?
+                    </PTag>
+                    <Button onClick={() => setOpen(true)}>Add article</Button>
+                </div>
+
+            <PostsGenaration />
+
+        </div>
+    );
+};
+
+const PostsGenaration = (): JSX.Element => {
+
+    const posts = useTypedSelector(state => state.posts.posts);
+
+    return (
+        <>
             {posts && [...posts].sort((a, b) => a.date < b.date ? 1 : -1).map((post) => {
                 return (
                     <NavLink key={post.id} to={'/posts/' + post.id}>
@@ -53,8 +72,8 @@ const Posts: React.FC = ():JSX.Element => {
                     </NavLink>
                 )
             })}
-        </div>
-    );
-};
+        </>
+    )
+}
 
 export default Posts;

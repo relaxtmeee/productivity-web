@@ -23,8 +23,13 @@ const initialState = {
 
 export const fetchPosts = createAsyncThunk(
     'posts/fetchPosts',
-    async (userId: string | undefined) => {
-        return await getPost(userId);
+    async (userId: string | undefined, {rejectWithValue}) => {
+        const response = await getPost(userId);
+        if (typeof response !== 'string') {
+          return response;
+        } else {
+          return rejectWithValue(response);
+        }
     }
 )
 

@@ -9,7 +9,6 @@
     outline: none;
     border: 2px solid var(--border);
     box-shadow: 0 0 10px 2px var(--border-hover);
-    position: relative;
 }
 
 .button:hover {
