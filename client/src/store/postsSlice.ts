@@ -10,11 +10,6 @@ export interface IPosts {
     postsLoadingStatus: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
-export interface IPostRequest {
-    postId: string
-    userId: string
-}
-
 const initialState = {
     posts: [],
     post: undefined,
@@ -23,7 +18,7 @@ const initialState = {
 
 export const fetchPosts = createAsyncThunk(
     'posts/fetchPosts',
-    async (userId: string | undefined, {rejectWithValue}) => {
+    async (userId: string, {rejectWithValue}) => {
         const response = await getPost(userId);
         if (typeof response !== 'string') {
           return response;
@@ -35,8 +30,13 @@ export const fetchPosts = createAsyncThunk(
 
 export const fetchPost = createAsyncThunk(
     'posts/fetchPost',
-    async ({postId, userId}: IPostRequest) => {
-        return await getOnePost(postId, userId);
+    async (postId: string, {rejectWithValue}) => {
+        const response = await getOnePost(postId);
+        if (typeof response !== 'string') {
+          return response;
+        } else {
+          return rejectWithValue(response);
+        }
     }
 )
 
@@ -44,7 +44,8 @@ const postsSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
-        addPost: (state, action) => {state.posts = action.payload},
+        addPost: (state, action) => {state.posts?.push(action.payload)},
+        setPostNull: (state) => {state.posts = []}
     },
     extraReducers: (builder) => {
         builder 
@@ -57,7 +58,7 @@ const postsSlice = createSlice({
 
             .addCase(fetchPost.pending, state => {state.postsLoadingStatus =  'pending'})
             .addCase(fetchPost.fulfilled, (state, action) => {
-                state.post=  action.payload;
+                state.post =  action.payload;
                 state.postsLoadingStatus = 'idle';     
             })
             .addCase(fetchPost.rejected, state => {state.postsLoadingStatus = 'failed'})
@@ -67,5 +68,7 @@ const postsSlice = createSlice({
 
 
 const {actions, reducer} = postsSlice;
+
+export const {addPost, setPostNull} = actions;
 
 export default reducer;

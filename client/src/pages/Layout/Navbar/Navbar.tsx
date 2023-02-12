@@ -7,12 +7,13 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 import { fetchUser } from "../../../store/userSlice";
 import { NavLink } from "react-router-dom";
+import { fetchPosts } from "../../../store/postsSlice";
 
 const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
 
     const user = useTypedSelector(state => state.user.auth);
     const userEmail = useTypedSelector(state => state.user.user?.email);
-    const dispath = useDispatch<AppDispatch>();
+    const dispatch = useDispatch<AppDispatch>();
 
     const navigate = useNavigate();
 
@@ -21,7 +22,8 @@ const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
     }
 
     const logOut = () => {
-        dispath(fetchUser({user: {}, auth: false}));
+        dispatch(fetchUser({user: {}, auth: false}));
+
         localStorage.removeItem('token');
         navigate('/auth');
     }

@@ -8,6 +8,7 @@ import { useTypedSelector } from '../../../../../store/selectorTypedHook';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../../../store/store';
 import Spinner from '../../../../../ui/Spinner/Spinner';
+import { ErrorMessage } from '../../../../../ui/Error/ErrorBoundary';
 
 const Post = () => {
 
@@ -21,15 +22,19 @@ const Post = () => {
     useEffect(() => {
         if(typeof userId !== 'undefined' && typeof postId !== 'undefined') {
             try {
-                dispatch(fetchPost({postId, userId}));
+                dispatch(fetchPost(postId));
             } catch (error) {
                 console.log(error);
             }
         }
     }, [])    
         
-    if(loading !== 'idle') {
-        return <Spinner></Spinner>
+    if(loading === 'idle') {
+        return <Spinner />
+    }
+
+    if (loading === 'failed') {
+        return <ErrorMessage />
     }
     
     return (

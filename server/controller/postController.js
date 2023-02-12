@@ -1,5 +1,6 @@
 const ApiError = require('../error/ApiError');
 const { Post } = require('../models/models');
+const jwt = require('jsonwebtoken');
 
 class PostController {
     async create (req, res, next) {
@@ -16,7 +17,13 @@ class PostController {
 
     async getOne (req, res, next) {
         const { id } = req.params;
+
         const post = await Post.findOne({where: {id}});
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        if(decoded.id != post.userId) {
+            return res.status(403).json({message: 'Нет доступа'})
+        }
         return res.json(post);
     }
 

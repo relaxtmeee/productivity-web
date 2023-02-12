@@ -1,12 +1,13 @@
 const Router = require('express');
 const postController = require('../controller/postController');
-const checkCurrentUserMiddleware = require('../middleware/checkCurrentUserMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
+const getAllPostsMiddleware = require('../middleware/getAllPostsMIddleware');
 
 const router = new Router();
 
 router.post('/', postController.create);
-router.get('/', checkCurrentUserMiddleware() ,postController.getAll);
-router.get('/:id', checkCurrentUserMiddleware() , postController.getOne);
+router.get('/', authMiddleware, getAllPostsMiddleware, postController.getAll);
+router.get('/:id', authMiddleware, postController.getOne);
 router.delete('/:id', postController.deleteOne);
 
 module.exports = router;

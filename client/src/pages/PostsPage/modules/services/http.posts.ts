@@ -1,7 +1,7 @@
 import { $authHost } from "../../../AuthPage/modules/services/http.user";
 import { IPost } from "../interfaces/Posts.interface";
 
-export async function getPost(userId: string | undefined): Promise<IPost[] | undefined | string> {
+export async function getPost(userId: string): Promise<IPost[] | undefined | string> {
     try {
       if(typeof userId !== "undefined") {
         const { data } = await $authHost.get<IPost[]>(process.env.REACT_APP_API + `/post/?userId=${userId}`);
@@ -19,6 +19,8 @@ export async function createPost(post: IPost) {
     const { data } = await $authHost.post<IPost>(process.env.REACT_APP_API + `/post`, post);
     return data;
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      return error.message
+    }   
   }
 }

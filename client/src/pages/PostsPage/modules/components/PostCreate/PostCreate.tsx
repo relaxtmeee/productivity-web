@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchPosts } from '../../../../../store/postsSlice';
+import { addPost, fetchPosts } from '../../../../../store/postsSlice';
 import { useTypedSelector } from '../../../../../store/selectorTypedHook';
 import { AppDispatch } from '../../../../../store/store';
 import Button from '../../../../../ui/Button/Button';
@@ -24,7 +24,7 @@ const PostCreate = ({setOpen, ...props}: IPostCreate): JSX.Element => {
         try {
             if(typeof userId !== "undefined" && name.length > 1 && description.length > 1) {
                 await createPost({name, description, date, userId});
-                dispatch(fetchPosts(userId));
+                dispatch(addPost({name, description, date, userId}));
             }
         } catch (error) {
             

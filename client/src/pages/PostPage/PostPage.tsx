@@ -1,3 +1,4 @@
+import ErrorBoundary from "../../ui/Error/ErrorBoundary";
 import Post from "./modules/components/Post/Post";
 
 const PostPage = () => {
@@ -6,7 +7,10 @@ const PostPage = () => {
     
     return (
         <>
-            <Post/>
+            <ErrorBoundary>
+                <Post/>
+            </ErrorBoundary>
+            
         </>
     );
 };

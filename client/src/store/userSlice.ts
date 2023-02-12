@@ -13,7 +13,7 @@ const initialState = {
     userLoadingStatus: 'idle'
 } as IUser;
 
-const postsSlice = createSlice({
+const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
@@ -27,7 +27,7 @@ const postsSlice = createSlice({
     }
 })
 
-const { actions, reducer } = postsSlice;
+const { actions, reducer } = userSlice;
 
 export const { fetchingUser, fetchUser, fetchedUser } = actions;
 
