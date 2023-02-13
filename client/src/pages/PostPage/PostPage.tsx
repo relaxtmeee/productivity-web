@@ -10,7 +10,6 @@ const PostPage = () => {
             <ErrorBoundary>
                 <Post/>
             </ErrorBoundary>
-            
         </>
     );
 };

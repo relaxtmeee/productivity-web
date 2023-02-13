@@ -17,6 +17,11 @@
     color: var(--grey-light);
 }
 
+.law {
+    text-align: center;
+
+}
+
 @media (max-width: 765px) {
     .footer
     {

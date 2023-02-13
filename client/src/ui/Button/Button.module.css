@@ -20,10 +20,22 @@
     color: var(--warning-text);
     background: var(--warning);
     border: 2px solid var(--warning-border);
-    box-shadow: 0 0 10px 2px var(--warning-border-hover);
+    box-shadow: 0 0 10px 7px var(--warning-border-hover);
 }
 
 .warning:hover {
     border: 2px solid var(--warning-border-hover);
-    box-shadow: 0 0 10px 2px var(--warning-border);
+    box-shadow: 0 0 10px 10px var(--warning-border);
+}
+
+.danger {
+    color: var(--danger-text);
+    background: var(--danger);
+    border: 2px solid var(--danger-border);
+    box-shadow: 0 0 10px 2px var(--danger-border-hover);
+}
+
+.danger:hover {
+    border: 2px solid var(--danger-border-hover);
+    box-shadow: 0 0 10px 5px var(--danger-border);
 }

@@ -23,8 +23,11 @@ const PostCreate = ({setOpen, ...props}: IPostCreate): JSX.Element => {
         const date = new Date().toString();
         try {
             if(typeof userId !== "undefined" && name.length > 1 && description.length > 1) {
-                await createPost({name, description, date, userId});
-                dispatch(addPost({name, description, date, userId}));
+                const data = await createPost({name, description, date, userId});
+                if(typeof data !== 'undefined' && typeof data !== 'string') {
+                    dispatch(addPost({id: data.id ,name, description, date, userId}));
+                }
+                
             }
         } catch (error) {
             

@@ -45,7 +45,8 @@ const postsSlice = createSlice({
     initialState,
     reducers: {
         addPost: (state, action) => {state.posts?.push(action.payload)},
-        setPostNull: (state) => {state.posts = []}
+        deletePost: (state, action) => {state.posts?.filter(post => post.id !== action.payload)},
+        setPostsNull: (state) => {state.posts = []}
     },
     extraReducers: (builder) => {
         builder 
@@ -69,6 +70,6 @@ const postsSlice = createSlice({
 
 const {actions, reducer} = postsSlice;
 
-export const {addPost, setPostNull} = actions;
+export const {addPost, setPostsNull, deletePost} = actions;
 
 export default reducer;

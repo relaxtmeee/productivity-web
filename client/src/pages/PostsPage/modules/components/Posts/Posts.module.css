@@ -30,3 +30,9 @@
 .heading {
     align-self: center;
 } 
+
+@media screen and (max-width: 640px) {
+    .post {
+        width: 100%;
+    }
+}   

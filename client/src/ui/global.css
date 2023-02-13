@@ -39,6 +39,8 @@ a {
     --warning-text: #443d2d;
     --warning-border: #897246;
     --warning-border-hover: #b69b68;
-    --danger: #ec3232;
-    --danger-text: #ba3838;
+    --danger: #d24545;
+    --danger-text: #611212;
+    --danger-border: #ab2626;
+    --danger-border-hover: #da2727;
 }

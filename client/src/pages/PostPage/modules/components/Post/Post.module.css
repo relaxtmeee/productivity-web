@@ -1,6 +1,10 @@
-.post {
-    width: 600px;
+.block {
+    max-width: 600px;
     margin: 20px auto;
+}
+
+.post {
+    
     padding: 20px;
     background: var(--bg-input);
     border: 2px solid var(--border);
@@ -10,4 +14,14 @@
 
 .heading {
     align-self: center;
+}
+
+.buttons {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button {
+    margin-left: 20px;
 }

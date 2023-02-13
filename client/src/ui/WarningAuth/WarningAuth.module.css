@@ -1,0 +1,25 @@
+.warning {
+    position: relative;
+    width: fit-content;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 20px;
+    margin: 20px auto;
+    border: 1px solid var(--warning-border);
+    border-radius: 10px;
+    background: var(--warning);
+    color: var(--warning-text);
+    animation: warn 2s infinite ease-in-out;
+}
+
+@keyframes warn {
+    0% {
+        box-shadow: 0 0 10px 5px var(--warning-border-hover);
+    }
+    50% {
+        box-shadow: 0 0 10px 15px var(--warning-border-hover);
+    }
+    100% {
+        box-shadow: 0 0 10px 5px var(--warning-border-hover);
+    }
+}   

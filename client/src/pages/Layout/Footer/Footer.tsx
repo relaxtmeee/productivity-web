@@ -6,7 +6,7 @@ import format from 'date-fns/format';
 const Footer = ({className, ...props}: IFooter):JSX.Element => {
     return (
         <footer className={cn(className, styles.footer)} {...props} role='footer'>
-            <div>
+            <div className={styles.law}>
                 MyWeb © 2022 - {format(new Date(), 'yyyy')} Все права защищены
             </div>
             <a href='#'>

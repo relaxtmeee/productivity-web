@@ -28,7 +28,7 @@ class PostController {
     }
 
     async deleteOne (req, res, next) {
-        const { id } = req.query;
+        const { id } = req.params;
         const post = await Post.destroy({where: {id}})
         return res.json(post);
     }
