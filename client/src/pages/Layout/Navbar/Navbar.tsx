@@ -49,7 +49,7 @@ const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
                         <NavLink to={'/posts'}>Blog</NavLink>
                     </li>
                     <li onClick={() => setOpenMenu(false)} className={styles.link}>
-                        <a href="#">Todo</a>
+                        <NavLink to={'/todos'}>Todo</NavLink>
                     </li>
                     <li onClick={() => setOpenMenu(false)} className={styles.link}>
                         <a href="#">Habits</a>

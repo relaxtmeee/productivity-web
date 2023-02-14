@@ -4,11 +4,13 @@ import MainPage from "./MainPage/MainPage";
 import { withLayout } from "./Layout/Layout";
 import PostsPage from "./PostsPage/PostsPage";
 import PostPage from "./PostPage/PostPage";
+import TodosPage from "./TodosPage/TodosPage";
 
 const RouterComponent = ():JSX.Element => {
 
     return (
         <Routes>
+            <Route path="/todos" element={<TodosPage/>}/>
             <Route path="/posts/:postId" element={<PostPage/>}/>
             <Route path="/posts" element={<PostsPage/>}/>
             <Route path="/auth" element={<AuthPage/>}/>
