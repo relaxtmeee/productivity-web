@@ -17,8 +17,6 @@
     color: var(--grey-light);
 }
 
-
-
 @media (max-width: 765px) {
     .footer
     {

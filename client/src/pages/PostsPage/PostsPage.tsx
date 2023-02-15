@@ -1,12 +1,17 @@
+import React, { Suspense } from 'react';
 import ErrorBoundary from "../../ui/Error/ErrorBoundary";
-import Posts from "./modules/components/Posts/Posts";
+import Spinner from '../../ui/Spinner/Spinner';
+
+const Posts = React.lazy(() => import("./modules/components/Posts/Posts"));
 
 const PostsPage: React.FC = () => {
 
     return (
         <>
             <ErrorBoundary>
-                <Posts />
+                <Suspense fallback={<Spinner />}>
+                    <Posts />
+                </Suspense>
             </ErrorBoundary>
             
         </>

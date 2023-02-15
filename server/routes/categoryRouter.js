@@ -1,10 +1,11 @@
 const Router = require('express');
 const categoryController = require('../controller/categoryController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = new Router();
 
 router.post('/', categoryController.create);
-router.get('/', categoryController.getAll);
-router.get('/:id', categoryController.getOne);
+router.get('/', authMiddleware, categoryController.getAll);
+router.get('/:id', authMiddleware, categoryController.getOne);
 
 module.exports = router;

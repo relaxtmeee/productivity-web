@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import posts from './postsSlice';
 import user from './userSlice';
+import todos from './todosSlice';
 
 const stringMiddleware = () => (next:any) => (action:any) => {
     if (typeof action === 'string') {
@@ -12,7 +13,7 @@ const stringMiddleware = () => (next:any) => (action:any) => {
 }
 
 const store = configureStore({
-    reducer: { user, posts },
+    reducer: { user, posts, todos },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware),
     devTools: process.env.NODE_ENV !== 'production'
 })

@@ -18,6 +18,7 @@
 {
     grid-area: body;
     outline: none;
+    padding: 20px;
 }
 
 .footer

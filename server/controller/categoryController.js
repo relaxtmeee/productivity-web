@@ -2,13 +2,14 @@ const {Category} = require('../models/models');
 
 class CategoryController {
     async create (req, res, next) {
-        const { name, description, status, userId } = req.body;
-        const category = await Category.create({name, description, status, userId});
+        const { name, status, userId } = req.body;
+        const category = await Category.create({name, status, userId});
         return res.json(category);
     }
 
     async getAll (req, res, next) {
-        const category = await Category.findAll();
+        const { userId } = req.query;
+        const category = await Category.findAll({where: { userId }});
         return res.json(category);
     }
 

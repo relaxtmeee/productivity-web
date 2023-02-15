@@ -1,8 +1,17 @@
+import React, { Suspense } from "react";
+import ErrorBoundary from "../../ui/Error/ErrorBoundary";
+import Spinner from "../../ui/Spinner/Spinner";
+import Todos from "./modules/components/Todos/Todos";
+
 const TodosPage = () => {
     return (
-        <div>
-            Here will be TODOS
-        </div>
+        <>
+            <ErrorBoundary>
+                <Suspense fallback={<Spinner />}>
+                    <Todos />
+                </Suspense>
+            </ErrorBoundary>
+        </>
     );
 };
 

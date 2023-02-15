@@ -1,0 +1,24 @@
+.todos {
+    width: 250px;
+}
+
+.todos > p {
+    margin-bottom: 10px;
+}
+
+.button {
+    width: 100%;
+}
+
+.category {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ededff;
+    background: #454586;
+    border: 2px solid #29295b;
+    box-shadow: 0 0 10px 2px #454586;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+}
