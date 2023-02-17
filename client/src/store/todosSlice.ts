@@ -5,12 +5,12 @@ import { getCategories } from "../pages/TodosPage/modules/services/todosAPI";
 
 export interface ITodos {
     categories: ICategory[] | undefined
-    postsLoadingStatus: 'idle' | 'pending' | 'succeeded' | 'failed'
+    todosLoadingStatus: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
 const initialState = {
     categories: [],
-    postsLoadingStatus: 'idle'
+    todosLoadingStatus: 'idle'
 } as ITodos
 
 export const fetchCategories = createAsyncThunk(
@@ -28,20 +28,24 @@ export const fetchCategories = createAsyncThunk(
 const postsSlice = createSlice({
     name: 'todos',
     initialState,
-    reducers: {},
+    reducers: {
+        addCategory: (state, action) => {state.categories?.push(action.payload)}
+    },
     extraReducers: (builder) => {
         builder 
-            .addCase(fetchCategories.pending, state => {state.postsLoadingStatus =  'pending'})
+            .addCase(fetchCategories.pending, state => {state.todosLoadingStatus =  'pending'})
             .addCase(fetchCategories.fulfilled, (state, action) => {
                 state.categories =  action.payload;
-                state.postsLoadingStatus = 'idle';     
+                state.todosLoadingStatus = 'idle';     
             })
-            .addCase(fetchCategories.rejected, state => {state.postsLoadingStatus = 'failed'})
+            .addCase(fetchCategories.rejected, state => {state.todosLoadingStatus = 'failed'})
             .addDefaultCase(() => {})
     }
 });
 
 
-const {actions, reducer} = postsSlice;
+const { actions, reducer } = postsSlice;
+
+export const { addCategory } = actions;
 
 export default reducer;
