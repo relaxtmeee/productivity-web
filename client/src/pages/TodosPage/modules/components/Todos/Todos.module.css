@@ -1,8 +1,14 @@
 .todos {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+}
+
+.category {
     width: 250px;
 }
 
-.todos > p {
+.category > p {
     margin-bottom: 10px;
 }
 
@@ -10,7 +16,7 @@
     width: 100%;
 }
 
-.category {
+.categoryButton {
     width: 100%;
     display: flex;
     align-items: center;
