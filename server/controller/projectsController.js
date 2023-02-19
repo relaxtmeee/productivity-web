@@ -3,21 +3,34 @@ const {Project} = require('../models/models');
 class ProjectController {
     async create (req, res, next) {
         const { name, description, status, userId, categoryId } = req.body;
-        console.log(1);
-        const project = await Project.create({name, description, status, userId, categoryId});
-        return res.json(project);
+        try {
+            const project = await Project.create({name, description, status, userId, categoryId});
+            console.log(project);
+            return res.json(project);
+        } catch (error) {
+            return error
+        }
+
     }
 
     async getAll (req, res, next) {
         const { categoryId } = req.query;
-        const projects = await Project.findAll({where: {categoryId}});
-        return res.json(projects);
+        try {
+            const projects = await Project.findAll({where: {categoryId}});
+            return res.json(projects);
+        } catch (error) {
+            return error
+        }
     }
 
     async getOne (req, res, next) {
         const { id } = req.params;
-        const project = await Project.findOne({where: {id}});
-        return res.json(project);
+        try {
+            const project = await Project.findOne({where: {id}});
+            return res.json(project);
+        } catch (error) {
+            return error
+        }
     }
 }
 

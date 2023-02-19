@@ -45,3 +45,19 @@ export async function getCategoryProjects (categoryId: string) : Promise<IProjec
         }
     }
 }
+
+export async function createCategoryProject (project: IProject) : Promise<IProject | undefined | string> {
+    
+    
+    try {
+
+        const { data } = await $authHost.post<IProject>(process.env.REACT_APP_API + `/projects`, project);
+            
+        return data;
+
+    } catch (error) {
+        if(error instanceof Error) {
+            return error.message
+        }
+    }
+}

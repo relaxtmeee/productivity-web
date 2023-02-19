@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { useTypedSelector } from '../../../../../store/selectorTypedHook';
@@ -10,9 +10,11 @@ import Input from '../../../../../ui/Input/Input';
 import PTag from '../../../../../ui/PTag/PTag';
 import Spinner from '../../../../../ui/Spinner/Spinner';
 import WarningAuth from '../../../../../ui/WarningAuth/WarningAuth';
-import { ICategory } from '../../interfaces/Category.interface';
+import cn from 'classnames';
 import { createNewCategory } from '../../services/todosAPI';
 import styles from './Todos.module.css';
+import HTag from '../../../../../ui/Htag/HTag';
+import ProjectCreate from '../ProjectCreate/ProjectCreate';
 
 const Todos: React.FC = ():JSX.Element => {
 
@@ -68,27 +70,30 @@ const Todos: React.FC = ():JSX.Element => {
                 Add category
             </Button>
         </div>
-        <ProjectGeneration/>
-        </div>
+        <ProjectGeneration />
+    </div>
     );
 };
 
-const TodosGeneration = (): JSX.Element => {
+
+const TodosGeneration:FC = (): JSX.Element => {
 
     const dispatch = useDispatch<AppDispatch>();
 
     const categories = useTypedSelector(state => state.todos.categories);
-
-    const openProject = async (id: string) => {
-        dispatch(setCurrentCategory(id));
-        await dispatch(fetchCategoryProjects(id))
-    }
-
+    const currentCategory = useTypedSelector(state => state.todos.currentCategory);
+    
     return (
         <>  
             {categories?.map(category => {
                 return (
-                    <Button onClick={() => openProject(category.id ?? '')} className={styles.categoryButton} key={category.id}>
+                    <Button 
+                        onClick={() => dispatch(setCurrentCategory(category.id))} 
+                        className={cn(styles.categoryButton, {
+                            [styles.activeButton]: currentCategory === category.id
+                        })} 
+                        key={category.id}
+                    >
                         {category.name}
                     </Button>
                 )
@@ -97,26 +102,56 @@ const TodosGeneration = (): JSX.Element => {
     )
 }
 
-const ProjectGeneration = ():JSX.Element => {
+const ProjectGeneration:FC = ():JSX.Element => {
+    
+    const [open, setOpen] = useState(false);
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const currentCategory = useTypedSelector(state => state.todos.currentCategory);
+    const loading = useTypedSelector(state => state.todos.curentCategoryLoadingStatus)    
     const currentCategoryProjects = useTypedSelector(state => state.todos.curentCategoryProjects);
     
+    useEffect(() => {
+        dispatch(fetchCategoryProjects(currentCategory))
+    }, [currentCategory, dispatch])
+
     return (
-        <>
+        <div className={styles.projectsWrapper}>
+            {open ? <ProjectCreate setOpen={setOpen}/> : null}
+            <PTag size='18'>Projects</PTag>
+            {currentCategory 
+                ? 
+            <Button onClick={() => setOpen(true)}>
+                Add project
+            </Button>
+                :
+            null}
             {currentCategory 
                 ?
-            <div>
-                <h1>{currentCategory}</h1>
-                {currentCategoryProjects?.map(el => {
-                    return <div>{el.name}</div>
-                })}
+            <div className={styles.projects}>
+
+                {typeof currentCategoryProjects !== 'undefined' && currentCategoryProjects?.length > 0 
+                    ? 
+                currentCategoryProjects?.map(el => {
+                    return (
+                        <article className={styles.project} key={el.id}>
+                            <HTag htag='h2'>{el.name}</HTag>
+                            <PTag size='18'>{el.description}</PTag>
+                            <PTag size='14'>Status: {el.status}</PTag>
+                        </article>
+                    )
+                    
+                }) 
+                    : 
+                <HTag htag='h3'>Empty</HTag>}
             </div> 
-               
                 :
-            <div>Выберите категорию</div>
+            <HTag htag='h2'>Choose category</HTag>
             }
-        </>
+            {loading === 'pending' ? <Spinner /> : null}
+            {loading === 'failed' ? <ErrorMessage /> : null}
+        </div>
     )
 }
 

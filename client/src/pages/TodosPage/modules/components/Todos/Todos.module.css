@@ -29,3 +29,28 @@
     padding: 10px 20px;
     margin-bottom: 10px;
 }
+
+.activeButton {
+    margin: 20px 0;
+    color: rgb(226, 226, 137);
+    background: rgb(99, 99, 46);
+    border: 2px solid rgb(170, 170, 95);
+    box-shadow: 0 0 10px 2px rgb(118, 118, 73);
+}   
+
+.projects {
+    display: grid;
+    margin-top: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.project {
+    display: grid;
+    grid-template-rows: 1fr repeat(2, auto);
+    gap: 10px;
+    background: var(--bg-input);
+    padding: 10px;
+    border: 2px solid var(--bg-input);
+    border-radius: 5px;
+}
