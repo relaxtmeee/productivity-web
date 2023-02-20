@@ -8,7 +8,8 @@ class TaskController {
     }
 
     async getAll (req, res, next) {
-        const task = await Task.findAll();
+        const { projectId } = req.query;
+        const task = await Task.findAll({where: {projectId}});
         return res.json(task);
     }
 }

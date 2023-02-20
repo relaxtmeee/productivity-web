@@ -1,6 +1,7 @@
 import { $authHost } from "../../../AuthPage/modules/services/http.user";
 import { ICategory } from "../interfaces/Category.interface";
 import { IProject } from "../interfaces/Project.interface";
+import { ITask } from "../interfaces/Task.interface";
 
 
 export async function getCategories (userId: string) : Promise<ICategory[] | undefined | string> {
@@ -47,11 +48,23 @@ export async function getCategoryProjects (categoryId: string) : Promise<IProjec
 }
 
 export async function createCategoryProject (project: IProject) : Promise<IProject | undefined | string> {
-    
-    
+    try {
+        const { data } = await $authHost.post<IProject>(process.env.REACT_APP_API + `/projects`, project);
+            
+        return data;
+
+    } catch (error) {
+        if(error instanceof Error) {
+            return error.message
+        }
+    }
+}
+
+
+export async function getProjectTasks (projectId: string): Promise<ITask[] | undefined | string> {
     try {
 
-        const { data } = await $authHost.post<IProject>(process.env.REACT_APP_API + `/projects`, project);
+        const { data } = await $authHost.get<ITask[]>(process.env.REACT_APP_API + `/task?projectId=${projectId}`);
             
         return data;
 

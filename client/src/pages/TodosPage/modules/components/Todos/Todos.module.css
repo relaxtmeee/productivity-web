@@ -41,8 +41,9 @@
 .projects {
     display: grid;
     margin-top: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
     gap: 20px;
+    transition: all 0.3s;
 }
 
 .project {
@@ -53,4 +54,36 @@
     padding: 10px;
     border: 2px solid var(--bg-input);
     border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.activeProject {
+    /* order: -1; */
+    color: rgb(226, 226, 137);
+    background: rgb(99, 99, 46);
+    border: 2px solid rgb(170, 170, 95);
+    box-shadow: 0 0 10px 2px rgb(118, 118, 73);
+}
+
+.tasks {
+    display: grid;
+    margin-top: 10px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    transition: all 0.3s;
+}
+
+.task {
+    display: grid;
+    grid-template-rows: 1fr repeat(2, auto);
+    gap: 10px;
+    background: rgb(70, 99, 130);
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.task > p {
+    margin: 0;
 }

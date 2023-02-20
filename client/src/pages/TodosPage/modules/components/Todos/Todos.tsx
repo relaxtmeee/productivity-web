@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { useTypedSelector } from '../../../../../store/selectorTypedHook';
 import { AppDispatch } from '../../../../../store/store';
-import { addCategory, fetchCategories, fetchCategoryProjects, setCurrentCategory } from '../../../../../store/todosSlice';
+import { addCategory, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject } from '../../../../../store/todosSlice';
 import Button from '../../../../../ui/Button/Button';
 import { ErrorMessage } from '../../../../../ui/Error/ErrorBoundary';
 import Input from '../../../../../ui/Input/Input';
@@ -15,14 +15,15 @@ import { createNewCategory } from '../../services/todosAPI';
 import styles from './Todos.module.css';
 import HTag from '../../../../../ui/Htag/HTag';
 import ProjectCreate from '../ProjectCreate/ProjectCreate';
+import { IProject } from '../../interfaces/Project.interface';
 
-const Todos: React.FC = ():JSX.Element => {
+const Todos = ():JSX.Element => {
 
     const [category, setCategory] = useState<string>('');
 
     const userId = useTypedSelector(state => state.user.user?.id);
     const loading = useTypedSelector(state => state.todos.todosLoadingStatus);
-
+    
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
@@ -76,7 +77,7 @@ const Todos: React.FC = ():JSX.Element => {
 };
 
 
-const TodosGeneration:FC = (): JSX.Element => {
+const TodosGeneration = (): JSX.Element => {
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -88,7 +89,10 @@ const TodosGeneration:FC = (): JSX.Element => {
             {categories?.map(category => {
                 return (
                     <Button 
-                        onClick={() => dispatch(setCurrentCategory(category.id))} 
+                        onClick={() => {
+                            dispatch(setCurrentCategory(category.id));
+                            dispatch(setCurrentProject(undefined))
+                        }} 
                         className={cn(styles.categoryButton, {
                             [styles.activeButton]: currentCategory === category.id
                         })} 
@@ -102,20 +106,26 @@ const TodosGeneration:FC = (): JSX.Element => {
     )
 }
 
-const ProjectGeneration:FC = ():JSX.Element => {
+const ProjectGeneration = ():JSX.Element => {
     
     const [open, setOpen] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
 
     const currentCategory = useTypedSelector(state => state.todos.currentCategory);
-    const loading = useTypedSelector(state => state.todos.curentCategoryLoadingStatus)    
+    const loading = useTypedSelector(state => state.todos.curentCategoryLoadingStatus);   
     const currentCategoryProjects = useTypedSelector(state => state.todos.curentCategoryProjects);
-    
+
+    const currentProject = useTypedSelector(state => state.todos.currentProject)
+
     useEffect(() => {
         dispatch(fetchCategoryProjects(currentCategory))
     }, [currentCategory, dispatch])
 
+    const openProject = async (project: IProject) => {
+        dispatch(setCurrentProject(project));
+    }
+    
     return (
         <div className={styles.projectsWrapper}>
             {open ? <ProjectCreate setOpen={setOpen}/> : null}
@@ -127,6 +137,7 @@ const ProjectGeneration:FC = ():JSX.Element => {
             </Button>
                 :
             null}
+            {currentProject ? <TasksGeneration/> : null}
             {currentCategory 
                 ?
             <div className={styles.projects}>
@@ -135,11 +146,19 @@ const ProjectGeneration:FC = ():JSX.Element => {
                     ? 
                 currentCategoryProjects?.map(el => {
                     return (
-                        <article className={styles.project} key={el.id}>
-                            <HTag htag='h2'>{el.name}</HTag>
-                            <PTag size='18'>{el.description}</PTag>
-                            <PTag size='14'>Status: {el.status}</PTag>
-                        </article>
+                       <>
+                            <article 
+                                onClick={() => openProject(el)} 
+                                className={cn(styles.project, {
+                                    [styles.activeProject]: el.id === currentProject?.id
+                                })}
+                                key={el.id}
+                            >
+                                <HTag htag='h2'>{el.name}</HTag>
+                                <PTag size='18'>{el.description}</PTag>
+                                <PTag size='14'>Status: {el.status}</PTag>
+                            </article>
+                        </>
                     )
                     
                 }) 
@@ -151,6 +170,38 @@ const ProjectGeneration:FC = ():JSX.Element => {
             }
             {loading === 'pending' ? <Spinner /> : null}
             {loading === 'failed' ? <ErrorMessage /> : null}
+        </div>
+    )
+}
+
+const TasksGeneration = ():JSX.Element => {
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const tasks = useTypedSelector(state => state.todos.currentProjectTasks);
+    const currentProject = useTypedSelector(state => state.todos.currentProject);
+
+    useEffect(() => {
+        dispatch(fetchProjectTasks(currentProject?.id || ''));
+    }, [dispatch, currentProject])
+    
+    return (
+        <div className={styles.tasks}>
+            {tasks?.map(task => {
+                return (
+                    <div key={task.id} className={styles.task}>
+                        <HTag htag='h3'>
+                            {task.name}
+                        </HTag>
+                        <PTag size='18'>
+                            {task.description}
+                        </PTag>
+                        <PTag size='14'>
+                            {task.status}
+                        </PTag>
+                    </div>
+                )
+            })}
         </div>
     )
 }

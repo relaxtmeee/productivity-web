@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ICategory } from "../pages/TodosPage/modules/interfaces/Category.interface";
 import { IProject } from "../pages/TodosPage/modules/interfaces/Project.interface";
-import { getCategories, getCategoryProjects } from "../pages/TodosPage/modules/services/todosAPI";
+import { ITask } from "../pages/TodosPage/modules/interfaces/Task.interface";
+import { getCategories, getCategoryProjects, getProjectTasks } from "../pages/TodosPage/modules/services/todosAPI";
 
 
 export interface ITodos {
@@ -10,6 +11,9 @@ export interface ITodos {
     todosLoadingStatus: 'idle' | 'pending' | 'succeeded' | 'failed'
     curentCategoryProjects: IProject[] | undefined
     curentCategoryLoadingStatus: 'idle' | 'pending' | 'succeeded' | 'failed'
+    currentProject: IProject | undefined
+    currentProjectTasks: ITask[] | undefined
+    currentProjectTasksLoading: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
 const initialState = {
@@ -17,7 +21,10 @@ const initialState = {
     todosLoadingStatus: 'idle',
     currentCategory: '',
     curentCategoryProjects: [],
-    curentCategoryLoadingStatus: 'idle'
+    curentCategoryLoadingStatus: 'idle',
+    currentProject: undefined,
+    currentProjectTasks: [],
+    currentProjectTasksLoading: 'idle'
 } as ITodos
 
 export const fetchCategories = createAsyncThunk(
@@ -44,13 +51,26 @@ export const fetchCategoryProjects = createAsyncThunk(
     }
 )
 
+export const fetchProjectTasks = createAsyncThunk(
+    'posts/fetchProjectTasks',
+    async (projectId: string , {rejectWithValue}) => {
+        const response = await getProjectTasks(projectId);
+        if (typeof response !== 'string') {
+          return response;
+        } else {
+          return rejectWithValue(response);
+        }
+    }
+)
+
 const postsSlice = createSlice({
     name: 'todos',
     initialState,
     reducers: {
         addCategory: (state, action) => {state.categories?.push(action.payload)},
         setCurrentCategory: (state, action) => {state.currentCategory = action.payload},
-        addProject: (state, action) => {state.curentCategoryProjects?.push(action.payload)}
+        addProject: (state, action) => {state.curentCategoryProjects?.push(action.payload)},
+        setCurrentProject: (state, action) => {state.currentProject = action.payload}
     },
     extraReducers: (builder) => {
         builder 
@@ -67,6 +87,14 @@ const postsSlice = createSlice({
                 state.curentCategoryLoadingStatus = 'idle';     
             })
             .addCase(fetchCategoryProjects.rejected, state => {state.curentCategoryLoadingStatus = 'failed'})
+
+            .addCase(fetchProjectTasks.pending, state => {state.curentCategoryLoadingStatus =  'pending'})
+            .addCase(fetchProjectTasks.fulfilled, (state, action) => {
+                state.currentProjectTasks =  action.payload;
+                state.curentCategoryLoadingStatus = 'idle';     
+            })
+            .addCase(fetchProjectTasks.rejected, state => {state.curentCategoryLoadingStatus = 'failed'})
+
             .addDefaultCase(() => {})
     }
 });
@@ -74,6 +102,6 @@ const postsSlice = createSlice({
 
 const { actions, reducer } = postsSlice;
 
-export const { addCategory, setCurrentCategory, addProject } = actions;
+export const { addCategory, setCurrentCategory, addProject, setCurrentProject } = actions;
 
 export default reducer;
