@@ -1,9 +1,8 @@
-import { FC, memo, useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import { useTypedSelector } from '../../../../../store/selectorTypedHook';
 import { AppDispatch } from '../../../../../store/store';
-import { addCategory, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject } from '../../../../../store/todosSlice';
+import { addCategory, deleteTask, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject } from '../../../../../store/todosSlice';
 import Button from '../../../../../ui/Button/Button';
 import { ErrorMessage } from '../../../../../ui/Error/ErrorBoundary';
 import Input from '../../../../../ui/Input/Input';
@@ -11,11 +10,12 @@ import PTag from '../../../../../ui/PTag/PTag';
 import Spinner from '../../../../../ui/Spinner/Spinner';
 import WarningAuth from '../../../../../ui/WarningAuth/WarningAuth';
 import cn from 'classnames';
-import { createNewCategory } from '../../services/todosAPI';
+import { createNewCategory, deleteProjectTask } from '../../services/todosAPI';
 import styles from './Todos.module.css';
 import HTag from '../../../../../ui/Htag/HTag';
 import ProjectCreate from '../ProjectCreate/ProjectCreate';
 import { IProject } from '../../interfaces/Project.interface';
+import TaskCreate from '../TaskCreate/TaskCreate';
 
 const Todos = ():JSX.Element => {
 
@@ -146,19 +146,18 @@ const ProjectGeneration = ():JSX.Element => {
                     ? 
                 currentCategoryProjects?.map(el => {
                     return (
-                       <>
-                            <article 
-                                onClick={() => openProject(el)} 
-                                className={cn(styles.project, {
-                                    [styles.activeProject]: el.id === currentProject?.id
-                                })}
-                                key={el.id}
-                            >
-                                <HTag htag='h2'>{el.name}</HTag>
-                                <PTag size='18'>{el.description}</PTag>
-                                <PTag size='14'>Status: {el.status}</PTag>
-                            </article>
-                        </>
+                        <article 
+                            onClick={() => openProject(el)} 
+                            className={cn(styles.project, {
+                                [styles.activeProject]: el.id === currentProject?.id
+                            })}
+                            key={el.id}
+                        >
+                            <HTag htag='h2'>{el.name}</HTag>
+                            <PTag size='18'>{el.description}</PTag>
+                            <PTag size='14'>Status: {el.status}</PTag>
+                        </article>
+                        
                     )
                     
                 }) 
@@ -176,6 +175,8 @@ const ProjectGeneration = ():JSX.Element => {
 
 const TasksGeneration = ():JSX.Element => {
 
+    const [open, setOpen] = useState<boolean>(false);
+
     const dispatch = useDispatch<AppDispatch>();
 
     const tasks = useTypedSelector(state => state.todos.currentProjectTasks);
@@ -184,9 +185,26 @@ const TasksGeneration = ():JSX.Element => {
     useEffect(() => {
         dispatch(fetchProjectTasks(currentProject?.id || ''));
     }, [dispatch, currentProject])
+
+    const deleteCurrentProjectTask = async (id: string) => {
+        
+        try {
+            await deleteProjectTask(id)
+                .then(() => {
+                    dispatch(deleteTask(id));  
+                })
+            
+        } catch (error) {
+            
+        }
+    }
     
     return (
         <div className={styles.tasks}>
+            {open ? <TaskCreate setOpen={setOpen}/> : null}
+            <Button onClick={() => setOpen(true)} className={styles.taskButton}>
+                Add Task
+            </Button>
             {tasks?.map(task => {
                 return (
                     <div key={task.id} className={styles.task}>
@@ -199,6 +217,7 @@ const TasksGeneration = ():JSX.Element => {
                         <PTag size='14'>
                             {task.status}
                         </PTag>
+                        <div onClick={() => deleteCurrentProjectTask(task.id || '')} className={styles.x}></div>
                     </div>
                 )
             })}

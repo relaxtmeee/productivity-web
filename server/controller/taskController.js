@@ -12,6 +12,13 @@ class TaskController {
         const task = await Task.findAll({where: {projectId}});
         return res.json(task);
     }
+
+    async deleteOne (req, res, next) {
+        const { id } = req.params;
+        const task = await Task.destroy({where: {id}})
+        return res.json(task);
+    }
+
 }
 
 module.exports = new TaskController();

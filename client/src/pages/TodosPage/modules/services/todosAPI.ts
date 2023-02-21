@@ -74,3 +74,35 @@ export async function getProjectTasks (projectId: string): Promise<ITask[] | und
         }
     }
 }
+
+
+export async function createProjectTask(task: ITask): Promise<ITask | undefined | string> {
+    try {
+
+        const { data } = await $authHost.post<ITask>(process.env.REACT_APP_API + `/task`, task);
+            
+        return data;
+
+    } catch (error) {
+        if(error instanceof Error) {
+            return error.message
+        }
+    }
+}
+
+
+
+export async function deleteProjectTask(id: string): Promise<1 | 0 | undefined | string> {
+    try {
+
+        const { data } = await $authHost.delete<1 | 0>(process.env.REACT_APP_API + `/task/${id}`);
+        console.log(data);
+        
+        return data;
+
+    } catch (error) {
+        if(error instanceof Error) {
+            return error.message
+        }
+    }
+}
