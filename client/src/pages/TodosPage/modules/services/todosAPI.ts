@@ -60,6 +60,20 @@ export async function createCategoryProject (project: IProject) : Promise<IProje
     }
 }
 
+export async function deleteCategoryProject(id: string): Promise<1 | 0 | undefined | string> {
+    try {
+
+        const { data } = await $authHost.delete<1 | 0>(process.env.REACT_APP_API + `/projects/${id}`);
+        
+        return data;
+
+    } catch (error) {
+        if(error instanceof Error) {
+            return error.message
+        }
+    }
+}
+
 
 export async function getProjectTasks (projectId: string): Promise<ITask[] | undefined | string> {
     try {
@@ -96,7 +110,6 @@ export async function deleteProjectTask(id: string): Promise<1 | 0 | undefined |
     try {
 
         const { data } = await $authHost.delete<1 | 0>(process.env.REACT_APP_API + `/task/${id}`);
-        console.log(data);
         
         return data;
 

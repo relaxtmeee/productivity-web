@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../../../store/selectorTypedHook';
 import { AppDispatch } from '../../../../../store/store';
-import { addCategory, deleteTask, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject } from '../../../../../store/todosSlice';
+import { addCategory, deleteProject, deleteTask, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject, setTasksNull } from '../../../../../store/todosSlice';
 import Button from '../../../../../ui/Button/Button';
 import { ErrorMessage } from '../../../../../ui/Error/ErrorBoundary';
 import Input from '../../../../../ui/Input/Input';
@@ -10,7 +10,7 @@ import PTag from '../../../../../ui/PTag/PTag';
 import Spinner from '../../../../../ui/Spinner/Spinner';
 import WarningAuth from '../../../../../ui/WarningAuth/WarningAuth';
 import cn from 'classnames';
-import { createNewCategory, deleteProjectTask } from '../../services/todosAPI';
+import { createNewCategory, deleteCategoryProject, deleteProjectTask } from '../../services/todosAPI';
 import styles from './Todos.module.css';
 import HTag from '../../../../../ui/Htag/HTag';
 import ProjectCreate from '../ProjectCreate/ProjectCreate';
@@ -125,6 +125,14 @@ const ProjectGeneration = ():JSX.Element => {
     const openProject = async (project: IProject) => {
         dispatch(setCurrentProject(project));
     }
+
+    const deleteOneProject = async (id: string) => {
+        await deleteCategoryProject(id)
+            .then(() => {
+                dispatch(deleteProject(id));
+                dispatch(setTasksNull());
+            })
+    }
     
     return (
         <div className={styles.projectsWrapper}>
@@ -156,6 +164,7 @@ const ProjectGeneration = ():JSX.Element => {
                             <HTag htag='h2'>{el.name}</HTag>
                             <PTag size='18'>{el.description}</PTag>
                             <PTag size='14'>Status: {el.status}</PTag>
+                            <div onClick={() => deleteOneProject(el.id || '')} className={styles.x}></div>
                         </article>
                         
                     )

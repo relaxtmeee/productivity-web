@@ -1,4 +1,4 @@
-const {Project} = require('../models/models');
+const {Project, Task} = require('../models/models');
 
 class ProjectController {
     async create (req, res, next) {
@@ -28,6 +28,22 @@ class ProjectController {
         try {
             const project = await Project.findOne({where: {id}});
             return res.json(project);
+        } catch (error) {
+            return error
+        }
+    }
+
+    async deleteOne (req, res, next) {
+        const { id } = req.params;
+        try {
+            await Task.destroy({where: {projectId: id}})
+                .then(async () => {
+                    await Project.destroy({where: {id}})
+                })
+                .then((data => {
+                    return res.json(data);
+                }))
+
         } catch (error) {
             return error
         }

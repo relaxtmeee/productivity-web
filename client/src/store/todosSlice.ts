@@ -70,9 +70,11 @@ const postsSlice = createSlice({
         addCategory: (state, action) => {state.categories?.push(action.payload)},
         setCurrentCategory: (state, action) => {state.currentCategory = action.payload},
         addProject: (state, action) => {state.curentCategoryProjects?.push(action.payload)},
+        deleteProject: (state, action) => {state.curentCategoryProjects = state.curentCategoryProjects?.filter(project => project.id !== action.payload)},
         setCurrentProject: (state, action) => {state.currentProject = action.payload},
         addTask: (state, action) => {state.currentProjectTasks?.push(action.payload)},
-        deleteTask: (state, action) => {state.currentProjectTasks = state.currentProjectTasks?.filter(task => task.id !== action.payload)}
+        deleteTask: (state, action) => {state.currentProjectTasks = state.currentProjectTasks?.filter(task => task.id !== action.payload)},
+        setTasksNull: (state) => {state.currentProjectTasks = []}
     },
     extraReducers: (builder) => {
         builder 
@@ -108,8 +110,10 @@ export const {
     addCategory, 
     setCurrentCategory, 
     addProject, 
+    deleteProject,
     setCurrentProject, 
     addTask,
-    deleteTask } = actions;
+    deleteTask,
+    setTasksNull } = actions;
 
 export default reducer;

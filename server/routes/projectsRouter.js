@@ -7,5 +7,6 @@ const router = new Router();
 router.post('/', authMiddleware, projectsController.create);
 router.get('/', authMiddleware, projectsController.getAll);
 router.get('/:id', authMiddleware, projectsController.getOne);
+router.delete('/:id', authMiddleware, projectsController.deleteOne);
 
 module.exports = router;
