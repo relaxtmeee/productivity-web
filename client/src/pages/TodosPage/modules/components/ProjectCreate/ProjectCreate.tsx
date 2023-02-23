@@ -28,20 +28,14 @@ const ProjectCreate = ({setOpen, ...props}: IProjectCreate): JSX.Element => {
         
         try {
             if(typeof userId !== "undefined" && name.length > 1 && description.length > 1) {
-                console.log(1);
-                console.log(userId);
+
                 const data = await createCategoryProject({name, description, categoryId, userId, status: 'progress'});
-                console.log(data);
-                
                 
                 if(typeof data !== 'undefined' && typeof data !== 'string') {
                     dispatch(addProject({id: data.id, name, description, status: 'progress', categoryId, userId}));
                 }
-                console.log(2);
-                
             }
         } catch (error) {
-            console.log(error);
             
         }
         setOpen(false);

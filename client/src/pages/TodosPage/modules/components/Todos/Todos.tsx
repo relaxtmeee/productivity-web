@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, createRef, useState, FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../../../store/selectorTypedHook';
 import { AppDispatch } from '../../../../../store/store';
@@ -12,12 +12,15 @@ import WarningAuth from '../../../../../ui/WarningAuth/WarningAuth';
 import cn from 'classnames';
 import { createNewCategory, deleteCategoryProject, deleteProjectTask } from '../../services/todosAPI';
 import styles from './Todos.module.css';
+import './Fade.css';
 import HTag from '../../../../../ui/Htag/HTag';
 import ProjectCreate from '../ProjectCreate/ProjectCreate';
 import { IProject } from '../../interfaces/Project.interface';
 import TaskCreate from '../TaskCreate/TaskCreate';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-const Todos = ():JSX.Element => {
+
+const Todos:FC = ():JSX.Element => {
 
     const [category, setCategory] = useState<string>('');
 
@@ -77,7 +80,7 @@ const Todos = ():JSX.Element => {
 };
 
 
-const TodosGeneration = (): JSX.Element => {
+const TodosGeneration:FC = (): JSX.Element => {
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -106,7 +109,7 @@ const TodosGeneration = (): JSX.Element => {
     )
 }
 
-const ProjectGeneration = ():JSX.Element => {
+const ProjectGeneration:FC = ():JSX.Element => {
     
     const [open, setOpen] = useState(false);
 
@@ -182,10 +185,11 @@ const ProjectGeneration = ():JSX.Element => {
     )
 }
 
-const TasksGeneration = ():JSX.Element => {
+
+const TasksGeneration:FC = ():JSX.Element => {
 
     const [open, setOpen] = useState<boolean>(false);
-
+    
     const dispatch = useDispatch<AppDispatch>();
 
     const tasks = useTypedSelector(state => state.todos.currentProjectTasks);
@@ -194,9 +198,8 @@ const TasksGeneration = ():JSX.Element => {
     useEffect(() => {
         dispatch(fetchProjectTasks(currentProject?.id || ''));
     }, [dispatch, currentProject])
-
+    
     const deleteCurrentProjectTask = async (id: string) => {
-        
         try {
             await deleteProjectTask(id)
                 .then(() => {
@@ -207,29 +210,42 @@ const TasksGeneration = ():JSX.Element => {
             
         }
     }
-    
+
     return (
         <div className={styles.tasks}>
             {open ? <TaskCreate setOpen={setOpen}/> : null}
             <Button onClick={() => setOpen(true)} className={styles.taskButton}>
                 Add Task
             </Button>
-            {tasks?.map(task => {
-                return (
-                    <div key={task.id} className={styles.task}>
-                        <HTag htag='h3'>
-                            {task.name}
-                        </HTag>
-                        <PTag size='18'>
-                            {task.description}
-                        </PTag>
-                        <PTag size='14'>
-                            {task.status}
-                        </PTag>
-                        <div onClick={() => deleteCurrentProjectTask(task.id || '')} className={styles.x}></div>
-                    </div>
-                )
-            })}
+            <TransitionGroup component={null} className={styles.items}>
+                {tasks && tasks.map(task => {
+                    return (
+                        <CSSTransition 
+                            key={task.id} 
+                            timeout={300} 
+                            classNames='item'
+                        >
+                            <div className={styles.task}>
+                                <HTag htag='h3'>
+                                    {task.name}
+                                </HTag>
+                                <PTag size='18'>
+                                    {task.description}
+                                </PTag>
+                                <PTag size='14'>
+                                    {task.status}
+                                </PTag>
+                                <div 
+                                    onClick={() => {
+                                        deleteCurrentProjectTask(task.id || '')
+                                    }} 
+                                    className={styles.x}
+                                ></div>
+                            </div>
+                        </CSSTransition>
+                    )
+                })}
+            </TransitionGroup>
         </div>
     )
 }
