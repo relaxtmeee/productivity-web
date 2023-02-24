@@ -2,7 +2,7 @@ import { useEffect, useRef, createRef, useState, FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../../../store/selectorTypedHook';
 import { AppDispatch } from '../../../../../store/store';
-import { addCategory, deleteProject, deleteTask, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject, setTasksNull } from '../../../../../store/todosSlice';
+import { addCategory, deleteCategory, deleteProject, deleteTask, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject, setTasksNull } from '../../../../../store/todosSlice';
 import Button from '../../../../../ui/Button/Button';
 import { ErrorMessage } from '../../../../../ui/Error/ErrorBoundary';
 import Input from '../../../../../ui/Input/Input';
@@ -10,7 +10,7 @@ import PTag from '../../../../../ui/PTag/PTag';
 import Spinner from '../../../../../ui/Spinner/Spinner';
 import WarningAuth from '../../../../../ui/WarningAuth/WarningAuth';
 import cn from 'classnames';
-import { createNewCategory, deleteCategoryProject, deleteProjectTask } from '../../services/todosAPI';
+import { createNewCategory, deleteCategoryProject, deleteOneCategory, deleteProjectTask } from '../../services/todosAPI';
 import styles from './Todos.module.css';
 import './Fade.css';
 import HTag from '../../../../../ui/Htag/HTag';
@@ -18,6 +18,7 @@ import ProjectCreate from '../ProjectCreate/ProjectCreate';
 import { IProject } from '../../interfaces/Project.interface';
 import TaskCreate from '../TaskCreate/TaskCreate';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { IOneTodo } from '../../interfaces/OneTodo.interface';
 
 
 const Todos:FC = ():JSX.Element => {
@@ -63,7 +64,7 @@ const Todos:FC = ():JSX.Element => {
     if(!userId) {
         return <WarningAuth />
     }
-
+    
     return (
     <div className={styles.todos}>  
         <div className={styles.category}>
@@ -77,35 +78,69 @@ const Todos:FC = ():JSX.Element => {
         <ProjectGeneration />
     </div>
     );
-};
-
+}; 
 
 const TodosGeneration:FC = (): JSX.Element => {
 
-    const dispatch = useDispatch<AppDispatch>();
-
     const categories = useTypedSelector(state => state.todos.categories);
     const currentCategory = useTypedSelector(state => state.todos.currentCategory);
+    
+    console.log(categories);
+    console.log(currentCategory);
+    
     
     return (
         <>  
             {categories?.map(category => {
                 return (
-                    <Button 
-                        onClick={() => {
-                            dispatch(setCurrentCategory(category.id));
-                            dispatch(setCurrentProject(undefined))
-                        }} 
-                        className={cn(styles.categoryButton, {
-                            [styles.activeButton]: currentCategory === category.id
-                        })} 
-                        key={category.id}
-                    >
-                        {category.name}
-                    </Button>
+                    <OneTodo key={category.id} category={category} currentCategory={currentCategory}/>
                 )
             })}
         </>
+    )
+}
+
+const OneTodo:FC<IOneTodo> = ({category, currentCategory}):JSX.Element => {
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const deleteCurrentCategory = async () => {
+        console.log(currentCategory);
+        
+        await deleteOneCategory(currentCategory)
+            .then(() => {
+                dispatch(deleteCategory(currentCategory));
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+    
+    return (
+        <div className={cn({
+            [styles.oneCategory]: currentCategory === category.id
+        })}>
+            <Button 
+                onClick={() => {
+                    dispatch(setCurrentCategory(category.id));
+                    dispatch(setCurrentProject(undefined))
+                }} 
+                className={cn(styles.categoryButton, {
+                    [styles.activeButton]: currentCategory === category.id
+                })} 
+                key={category.id}
+            >
+                {category.name}
+            </Button>
+            {currentCategory === category.id 
+                ? 
+                <Button onClick={deleteCurrentCategory} className={styles.deleteCategory} type='danger'>
+                    Delete category   
+                </Button>                         
+                :
+            null
+            }
+        </div>
     )
 }
 
@@ -143,9 +178,11 @@ const ProjectGeneration:FC = ():JSX.Element => {
             <PTag size='18'>Projects</PTag>
             {currentCategory 
                 ? 
-            <Button onClick={() => setOpen(true)}>
-                Add project
-            </Button>
+                <>
+                    <Button onClick={() => setOpen(true)}>
+                        Add project
+                    </Button>
+                </>
                 :
             null}
             {currentProject ? <TasksGeneration/> : null}

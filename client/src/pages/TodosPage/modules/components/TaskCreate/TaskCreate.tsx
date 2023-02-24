@@ -17,17 +17,18 @@ const TaskCreate = ({setOpen, ...props}: ITaskCreate): JSX.Element => {
     const [description, setDescription] = useState('');
 
     const currentProject = useTypedSelector(state => state.todos.currentProject);
-    
+    const currentCategory = useTypedSelector(state => state.todos.currentCategory);
+
     const dispatch = useDispatch<AppDispatch>();
 
     const onCreateTask = async () => {
     
         try {
             if (typeof currentProject?.id !== 'undefined') {
-                const data = await createProjectTask({name, description, projectId: currentProject?.id , status: 'progress'});                
+                const data = await createProjectTask({name, description, projectId: currentProject?.id , status: 'progress', categoryId: currentCategory});                
 
                 if(typeof data !== 'undefined' && typeof data !== 'string') {
-                    dispatch(addTask({id: data.id, name, description, status: data.status }));
+                    dispatch(addTask({id: data.id, name, description, status: data.status, projectId: currentProject.id, categoryId: currentCategory }));
                 }
             }
 

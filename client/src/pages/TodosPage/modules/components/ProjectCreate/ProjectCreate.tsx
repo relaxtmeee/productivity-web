@@ -25,7 +25,6 @@ const ProjectCreate = ({setOpen, ...props}: IProjectCreate): JSX.Element => {
 
     const onCreatePost = async () => {
         
-        
         try {
             if(typeof userId !== "undefined" && name.length > 1 && description.length > 1) {
 
@@ -38,6 +37,7 @@ const ProjectCreate = ({setOpen, ...props}: IProjectCreate): JSX.Element => {
         } catch (error) {
             
         }
+        
         setOpen(false);
     }
 

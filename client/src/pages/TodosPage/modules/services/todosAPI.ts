@@ -17,8 +17,6 @@ export async function getCategories (userId: string) : Promise<ICategory[] | und
     }
 }
 
-
-
 export async function createNewCategory ({name, status, userId}: ICategory) : Promise<ICategory | undefined | string> {
     try {
         if(typeof userId !== "undefined") {
@@ -32,14 +30,13 @@ export async function createNewCategory ({name, status, userId}: ICategory) : Pr
     }
 }
 
-// http://localhost:5001/api/projects?userId=35&categoryId=2
-
-export async function getCategoryProjects (categoryId: string) : Promise<IProject[] | undefined | string> {
+// Здесь удаляются все проекты и их таски этой категории
+export async function deleteOneCategory (id: string) : Promise<1 | 0 | undefined | string> {
     try {
-        // if(typeof userId !== "undefined") {
-            const { data } = await $authHost.get<IProject[]>(process.env.REACT_APP_API + `/projects?categoryId=${categoryId}`);
+        if(typeof id !== "undefined") {
+            const { data } = await $authHost.delete<1 | 0>(process.env.REACT_APP_API + `/category?id=${id}`);
             return data;
-        // }
+        }
     } catch (error) {
         if(error instanceof Error) {
             return error.message
@@ -47,10 +44,26 @@ export async function getCategoryProjects (categoryId: string) : Promise<IProjec
     }
 }
 
-export async function createCategoryProject (project: IProject) : Promise<IProject | undefined | string> {
+// http://localhost:5001/api/projects?userId=35&categoryId=2
+
+export async function getCategoryProjects (categoryId: string) : Promise<IProject[] | undefined | string> {
+    try {
+
+        const { data } = await $authHost.get<IProject[]>(process.env.REACT_APP_API + `/projects?categoryId=${categoryId}`);
+        return data;
+
+    } catch (error) {
+        if(error instanceof Error) {
+            return error.message
+        }
+    }
+}
+
+
+
+export async function createCategoryProject(project: IProject) : Promise<IProject | undefined | string> {
     try {
         const { data } = await $authHost.post<IProject>(process.env.REACT_APP_API + `/projects`, project);
-            
         return data;
 
     } catch (error) {
@@ -62,9 +75,7 @@ export async function createCategoryProject (project: IProject) : Promise<IProje
 
 export async function deleteCategoryProject(id: string): Promise<1 | 0 | undefined | string> {
     try {
-
         const { data } = await $authHost.delete<1 | 0>(process.env.REACT_APP_API + `/projects/${id}`);
-        
         return data;
 
     } catch (error) {
@@ -94,7 +105,6 @@ export async function createProjectTask(task: ITask): Promise<ITask | undefined 
     try {
 
         const { data } = await $authHost.post<ITask>(process.env.REACT_APP_API + `/task`, task);
-            
         return data;
 
     } catch (error) {

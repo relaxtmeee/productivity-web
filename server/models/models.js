@@ -48,9 +48,11 @@ Project.belongsTo(User);
 Category.hasMany(Project);
 Project.belongsTo(Category);
 
+Category.hasMany(Task);
+Task.belongsTo(Category);
+
 Project.hasMany(Task);
 Task.belongsTo(Project);
-
 
 module.exports = {
     User,

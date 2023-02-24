@@ -69,9 +69,15 @@ const postsSlice = createSlice({
     reducers: {
         addCategory: (state, action) => {state.categories?.push(action.payload)},
         setCurrentCategory: (state, action) => {state.currentCategory = action.payload},
+        deleteCategory: (state, action) => {
+            state.categories = state.categories?.filter(category => category.id !== action.payload);
+            state.currentCategory = '';
+            state.curentCategoryProjects = [];
+            state.currentProjectTasks = [];
+        },
         addProject: (state, action) => {state.curentCategoryProjects?.push(action.payload)},
         deleteProject: (state, action) => {state.curentCategoryProjects = state.curentCategoryProjects?.filter(project => project.id !== action.payload)},
-        setCurrentProject: (state, action) => {state.currentProject = action.payload},
+        /* объединить два криэйтора */ setCurrentProject: (state, action) => {state.currentProject = action.payload},
         addTask: (state, action) => {state.currentProjectTasks?.push(action.payload)},
         deleteTask: (state, action) => {state.currentProjectTasks = state.currentProjectTasks?.filter(task => task.id !== action.payload)},
         setTasksNull: (state) => {state.currentProjectTasks = []}
@@ -80,7 +86,7 @@ const postsSlice = createSlice({
         builder 
             .addCase(fetchCategories.pending, state => {state.todosLoadingStatus =  'pending'})
             .addCase(fetchCategories.fulfilled, (state, action) => {
-                state.categories =  action.payload;
+                state.categories = action.payload;
                 state.todosLoadingStatus = 'idle';     
             })
             .addCase(fetchCategories.rejected, state => {state.todosLoadingStatus = 'failed'})
@@ -109,6 +115,7 @@ const { actions, reducer } = postsSlice;
 export const { 
     addCategory, 
     setCurrentCategory, 
+    deleteCategory,
     addProject, 
     deleteProject,
     setCurrentProject, 

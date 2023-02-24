@@ -1,23 +1,18 @@
-/* .item-enter {
+.delete-enter {
   opacity: 0;
-  transform: scale(0.9);
-  transform: translateX(-100px);
 }
-.item-enter-active {
+.delete-active {
   opacity: 1;
-  transform: translateX(0);
-  transition: opacity 300ms, transform 300ms;
+  transition: opacity 300ms;
 }
-.item-exit {
+.delete-exit {
   opacity: 1;
-  transform: translateX(0);
 }
-.item-exit-active {
+.delete-exit-active {
   opacity: 0;
-  transform: scale(0.9);
-  transform: translateX(100px);
-  transition: opacity 300ms, transform 300ms;
-} */
+  transition: opacity 300ms;
+}
+
 
 .item-enter-active {
   animation: fade-in ease-in 0.3s;
@@ -26,6 +21,7 @@
 .item-exit-active {
   animation: fade-out ease-in 0.3s;
 }
+
 
 @keyframes fade-in {
   0% {

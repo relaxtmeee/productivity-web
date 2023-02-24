@@ -1,4 +1,4 @@
-const {Project, Task} = require('../models/models');
+const {Project, Task, Category} = require('../models/models');
 
 class ProjectController {
     async create (req, res, next) {
@@ -48,6 +48,7 @@ class ProjectController {
             return error
         }
     }
+    
 }
 
 module.exports = new ProjectController();

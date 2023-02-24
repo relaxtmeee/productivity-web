@@ -1,4 +1,4 @@
-const {Category} = require('../models/models');
+const {Project, Task, Category} = require('../models/models');
 
 class CategoryController {
     async create (req, res, next) {
@@ -17,6 +17,33 @@ class CategoryController {
         const { id } = req.params;
         const category = await Category.findOne({ where: {id} });
         return res.json(category);
+    }
+
+    async deleteOne (req, res, next) {
+        const { id } = req.params;
+        const post = await Category.destroy({where: {id}})
+        return res.json(post);
+    }
+
+    async deleteAll (req, res, next) {
+        const { id } = req.query;
+        console.log(2);
+        console.log(id);
+        try {
+            await Task.destroy({where: {categoryId: id}})
+                .then(async () => {
+                    await Project.destroy({where: {categoryId: id}})
+                })
+                .then(async () => {
+                    await Category.destroy({where: {id}})
+                })
+                .then((data) => {
+                    return res.json(data);
+                })
+
+        } catch (error) {
+            return error
+        }
     }
 }
 
