@@ -1,10 +1,11 @@
+.p {
+    text-shadow: 0 0 3px var(--border-hover);
+}
 .p14{
     font-size: 14px;
-    margin-top: 20px;
 }
 .p16{
     font-size: 16px;
-    margin-top: 20px;
 }
 .p18{
     font-size: 18px;

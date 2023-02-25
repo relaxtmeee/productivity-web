@@ -26,7 +26,17 @@
 
 .link > a {
     font-size: 20px;
+    transition: all 0.3s;
+    text-shadow: 0 0 2px var(--border-hover);
 }
+
+.active > a {
+    font-size: 30px;
+    text-shadow: 0 0 5px var(--border-hover),
+                0 0 10px var(--border-hover),
+                0 0 15px var(--border-hover),
+                0 0 20px var(--border-hover)
+} 
 
 .user {
     display: flex;

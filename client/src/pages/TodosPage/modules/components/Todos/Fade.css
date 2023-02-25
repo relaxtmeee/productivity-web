@@ -1,29 +1,21 @@
-.delete-enter {
-  opacity: 0;
-}
-.delete-active {
-  opacity: 1;
-  transition: opacity 300ms;
-}
-.delete-exit {
-  opacity: 1;
-}
-.delete-exit-active {
-  opacity: 0;
-  transition: opacity 300ms;
+.category-enter-active {
+  animation: fade-in-category ease-in 0.3s;
 }
 
+.category-exit-active {
+  animation: fade-out-category ease-in 0.3s;
+}
 
 .item-enter-active {
-  animation: fade-in ease-in 0.3s;
+  animation: fade-in-item ease-in 0.3s;
 }
 
 .item-exit-active {
-  animation: fade-out ease-in 0.3s;
+  animation: fade-out-item ease-in 0.3s;
 }
 
 
-@keyframes fade-in {
+@keyframes fade-in-item {
   0% {
       opacity: 0;
       transform: scale(0);
@@ -34,7 +26,7 @@
   }
 }
 
-@keyframes fade-out {
+@keyframes fade-out-item  {
   0% {
       opacity: 1;
       transform: scale(1);
@@ -42,5 +34,28 @@
   100% {
       opacity: 0;
       transform: scale(0);
+  }
+} 
+
+
+@keyframes fade-in-category  {
+  0% {
+      opacity: 0;
+      transform: translate(-100%);
+  }
+  100% {
+      opacity: 1;
+      transform: translate(0);
+  }
+}
+
+@keyframes fade-out-category  {
+  0% {
+      opacity: 1;
+      transform: translate(0);
+  }
+  100% {
+      opacity: 0;
+      transform: translate(-100%);
   }
 } 

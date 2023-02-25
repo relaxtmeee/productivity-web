@@ -2,7 +2,7 @@ import { useEffect, useRef, createRef, useState, FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../../../store/selectorTypedHook';
 import { AppDispatch } from '../../../../../store/store';
-import { addCategory, deleteCategory, deleteProject, deleteTask, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject, setTasksNull } from '../../../../../store/todosSlice';
+import { addCategory, deleteCategory, deleteProject, deleteTask, fetchCategories, fetchCategoryProjects, fetchProjectTasks, setCurrentCategory, setCurrentProject } from '../../../../../store/todosSlice';
 import Button from '../../../../../ui/Button/Button';
 import { ErrorMessage } from '../../../../../ui/Error/ErrorBoundary';
 import Input from '../../../../../ui/Input/Input';
@@ -85,17 +85,21 @@ const TodosGeneration:FC = (): JSX.Element => {
     const categories = useTypedSelector(state => state.todos.categories);
     const currentCategory = useTypedSelector(state => state.todos.currentCategory);
     
-    console.log(categories);
-    console.log(currentCategory);
-    
-    
     return (
         <>  
-            {categories?.map(category => {
-                return (
-                    <OneTodo key={category.id} category={category} currentCategory={currentCategory}/>
-                )
-            })}
+            <TransitionGroup component={null} className={styles.items}>
+                {categories?.map(category => {
+                    return (
+                        <CSSTransition 
+                            key={category.id} 
+                            timeout={300} 
+                            classNames='category'
+                        >
+                            <OneTodo category={category} currentCategory={currentCategory}/>
+                        </CSSTransition>
+                    )
+                })}
+            </TransitionGroup>
         </>
     )
 }
@@ -105,7 +109,6 @@ const OneTodo:FC<IOneTodo> = ({category, currentCategory}):JSX.Element => {
     const dispatch = useDispatch<AppDispatch>();
 
     const deleteCurrentCategory = async () => {
-        console.log(currentCategory);
         
         await deleteOneCategory(currentCategory)
             .then(() => {
@@ -168,7 +171,6 @@ const ProjectGeneration:FC = ():JSX.Element => {
         await deleteCategoryProject(id)
             .then(() => {
                 dispatch(deleteProject(id));
-                dispatch(setTasksNull());
             })
     }
     
@@ -214,8 +216,9 @@ const ProjectGeneration:FC = ():JSX.Element => {
                 <HTag htag='h3'>Empty</HTag>}
             </div> 
                 :
-            <HTag htag='h2'>Choose category</HTag>
+            null
             }
+            {loading === 'pending' ? <HTag className={styles.choose} htag='h2'>Choose category</HTag> : null}
             {loading === 'pending' ? <Spinner /> : null}
             {loading === 'failed' ? <ErrorMessage /> : null}
         </div>

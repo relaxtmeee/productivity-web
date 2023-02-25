@@ -76,11 +76,16 @@ const postsSlice = createSlice({
             state.currentProjectTasks = [];
         },
         addProject: (state, action) => {state.curentCategoryProjects?.push(action.payload)},
-        deleteProject: (state, action) => {state.curentCategoryProjects = state.curentCategoryProjects?.filter(project => project.id !== action.payload)},
-        /* объединить два криэйтора */ setCurrentProject: (state, action) => {state.currentProject = action.payload},
+        deleteProject: (state, action) => {
+            state.curentCategoryProjects = state.curentCategoryProjects?.filter(project => project.id !== action.payload);
+            state.currentProjectTasks = [];
+            state.currentProject = undefined;
+        },
+        setCurrentProject: (state, action) => {
+            state.currentProject = action.payload;
+        },
         addTask: (state, action) => {state.currentProjectTasks?.push(action.payload)},
-        deleteTask: (state, action) => {state.currentProjectTasks = state.currentProjectTasks?.filter(task => task.id !== action.payload)},
-        setTasksNull: (state) => {state.currentProjectTasks = []}
+        deleteTask: (state, action) => {state.currentProjectTasks = state.currentProjectTasks?.filter(task => task.id !== action.payload)}
     },
     extraReducers: (builder) => {
         builder 
@@ -120,7 +125,6 @@ export const {
     deleteProject,
     setCurrentProject, 
     addTask,
-    deleteTask,
-    setTasksNull } = actions;
+    deleteTask } = actions;
 
 export default reducer;

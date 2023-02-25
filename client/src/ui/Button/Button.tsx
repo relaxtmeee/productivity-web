@@ -1,6 +1,7 @@
 import styles from './Button.module.css';
 import { IButton } from './Button.interface';
 import cn from 'classnames';
+import PTag from '../PTag/PTag';
 
 const Button = ({type, children, className, ...props} : IButton) => {
     return (
@@ -8,7 +9,9 @@ const Button = ({type, children, className, ...props} : IButton) => {
             [styles.warning]: type === 'warning',
             [styles.danger]: type === 'danger'
         })}>
-            {children}
+            <PTag size='16'>
+                {children}
+            </PTag>
         </button>
     );
 };

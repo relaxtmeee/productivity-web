@@ -17,10 +17,13 @@
 }
 
 .warning {
-    color: var(--warning-text);
     background: var(--warning);
     border: 2px solid var(--warning-border);
     box-shadow: 0 0 10px 7px var(--warning-border-hover);
+}
+.warning > p {
+    color: var(--warning-text);
+    text-shadow: 0 0 3px var(--warning-border-hover);
 }
 
 .warning:hover {
@@ -33,6 +36,11 @@
     background: var(--danger);
     border: 2px solid var(--danger-border);
     box-shadow: 0 0 10px 2px var(--danger-border-hover);
+}
+
+.danger > p {
+    color: var(--danger-text);
+    text-shadow: 0 0 3px var(--danger-border-hover);
 }
 
 .danger:hover {
