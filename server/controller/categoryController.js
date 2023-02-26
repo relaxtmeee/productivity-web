@@ -27,8 +27,6 @@ class CategoryController {
 
     async deleteAll (req, res, next) {
         const { id } = req.query;
-        console.log(2);
-        console.log(id);
         try {
             await Task.destroy({where: {categoryId: id}})
                 .then(async () => {

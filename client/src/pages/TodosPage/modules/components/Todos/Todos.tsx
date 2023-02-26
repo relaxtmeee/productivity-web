@@ -167,7 +167,8 @@ const ProjectGeneration:FC = ():JSX.Element => {
         dispatch(setCurrentProject(project));
     }
 
-    const deleteOneProject = async (id: string) => {
+    const deleteOneProject = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
+        event.stopPropagation();
         await deleteCategoryProject(id)
             .then(() => {
                 dispatch(deleteProject(id));
@@ -191,35 +192,47 @@ const ProjectGeneration:FC = ():JSX.Element => {
             {currentCategory 
                 ?
             <div className={styles.projects}>
+                <TransitionGroup component={null} className={styles.items}>
+                    {typeof currentCategoryProjects !== 'undefined'
+                        ? 
+                        currentCategoryProjects?.map(el => {
+                            return (
+                                <CSSTransition                             
+                                    key={el.id} 
+                                    timeout={300} 
+                                    classNames='item'
+                                >
+                                    <article 
+                                        onClick={() => openProject(el)} 
+                                        className={cn(styles.project, {
+                                            [styles.activeProject]: el.id === currentProject?.id
+                                        })}
 
-                {typeof currentCategoryProjects !== 'undefined' && currentCategoryProjects?.length > 0 
-                    ? 
-                currentCategoryProjects?.map(el => {
-                    return (
-                        <article 
-                            onClick={() => openProject(el)} 
-                            className={cn(styles.project, {
-                                [styles.activeProject]: el.id === currentProject?.id
-                            })}
-                            key={el.id}
-                        >
-                            <HTag htag='h2'>{el.name}</HTag>
-                            <PTag size='18'>{el.description}</PTag>
-                            <PTag size='14'>Status: {el.status}</PTag>
-                            <div onClick={() => deleteOneProject(el.id || '')} className={styles.x}></div>
-                        </article>
-                        
-                    )
-                    
-                }) 
-                    : 
-                <HTag htag='h3'>Empty</HTag>}
+                                    >
+                                        <HTag htag='h2'>{el.name}</HTag>
+                                        <PTag size='18'>{el.description}</PTag>
+                                        <PTag size='14'>Status: {el.status}</PTag>
+                                        <div onClick={(event) => deleteOneProject(event, el.id || '')} className={styles.x}></div>
+                                    </article>
+                                </CSSTransition>
+                            )
+                        }) 
+                        : 
+                        <div>empty</div>
+                    }
+                </TransitionGroup> 
             </div> 
                 :
             null
             }
-            {loading === 'pending' ? <HTag className={styles.choose} htag='h2'>Choose category</HTag> : null}
-            {loading === 'pending' ? <Spinner /> : null}
+            {loading === 'pending' 
+                ? 
+                <>
+                    <HTag className={styles.choose} htag='h2'>Choose category</HTag>
+                    <Spinner />
+                </> 
+                : 
+            null}
             {loading === 'failed' ? <ErrorMessage /> : null}
         </div>
     )
