@@ -1,10 +1,11 @@
 import HTag from "../../ui/Htag/HTag";
+import Welcome from "./modules/components/Welcome";
 
 const MainPage: React.FC = () => {
 
     return (
         <>
-            <HTag htag="h1">Welcome to MyWeb!</HTag>
+            <Welcome />
         </>
     );
 };
