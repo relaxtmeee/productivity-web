@@ -36,6 +36,13 @@ const Post = sequelize.define('post', {
     date: {type: DataTypes.DATE, allowNull: false}
 })
 
+const Habit = sequelize.define('habit', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false},
+    dates: {type: DataTypes.ARRAY(DataTypes.DATE), allowNull: false}
+})
+
+
 User.hasMany(Category);
 Category.belongsTo(User);
 
@@ -44,6 +51,9 @@ Post.belongsTo(User);
 
 User.hasMany(Project);
 Project.belongsTo(User);
+
+User.hasMany(Habit);
+Habit.belongsTo(User);
 
 Category.hasMany(Project);
 Project.belongsTo(Category);
@@ -59,5 +69,6 @@ module.exports = {
     Project,
     Category,
     Task,
-    Post
+    Post,
+    Habit
 }

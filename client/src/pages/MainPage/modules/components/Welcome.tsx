@@ -16,17 +16,17 @@ const Welcome = () => {
 
     useEffect(() => {
         const el1 = block1.current;
-        gsap.fromTo(el1, { top: '100%', opacity: 0}, {top: '50%', transform: 'translateY(-50%)', opacity: 1, duration: 2, scrollTrigger: {
+        gsap.fromTo(el1, { top: '100%', opacity: 0}, {top: '50%', transform: 'translateY(-50%)', opacity: 1, duration: 1, scrollTrigger: {
             trigger: el1
         }});
 
         const el2 = block2.current;
-        gsap.fromTo(el2, { top: '100%', opacity: 0}, {top: '50%', transform: 'translateY(-50%)', opacity: 1, duration: 2, scrollTrigger: {
+        gsap.fromTo(el2, { top: '100%', opacity: 0}, {top: '50%', transform: 'translateY(-50%)', opacity: 1, duration: 1, scrollTrigger: {
             trigger: el2
         }});
 
         const el3 = block3.current;
-        gsap.fromTo(el3, { top: '100%', opacity: 0}, {top: '50%', transform: 'translateY(-50%)',  opacity: 1, duration: 2, scrollTrigger: {
+        gsap.fromTo(el3, { top: '100%', opacity: 0}, {top: '50%', transform: 'translateY(-50%)',  opacity: 1, duration: 1, scrollTrigger: {
             trigger: el3
         }});
 

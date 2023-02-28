@@ -39,8 +39,8 @@
 .scroll {
     position: absolute;
     opacity: 0;
-    animation: scroll-animation  2s linear 0.6s 1 forwards,
-                swing 2s linear 2.6s infinite;
+    animation: scroll-animation  2s linear 0.8s 1 forwards,
+                swing 2s linear 2.8s infinite;
 }
 
 .scroll > svg {

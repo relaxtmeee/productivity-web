@@ -67,8 +67,13 @@ const Navbar = ({className, ...props}: INavbar ):JSX.Element => {
                     >
                         <NavLink to={'/todos'}>Todo</NavLink>
                     </li>
-                    <li onClick={() => setOpenMenu(false)} className={styles.link}>
-                        <a href="#">Habits</a>
+                    <li 
+                        onClick={() => setOpenMenu(false)} 
+                        className={cn(styles.link, {
+                            [styles.active]: location.pathname === '/habits'
+                        })}
+                    >
+                        <NavLink to={'/habits'}>Habits</NavLink>
                     </li>
                     <li onClick={() => setOpenMenu(false)} className={styles.link}>
                         <a href="#">Training constructor</a>
