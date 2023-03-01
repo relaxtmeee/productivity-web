@@ -1,9 +1,13 @@
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import format from "date-fns/format";
 import { useTypedSelector } from "../../../../../store/selectorTypedHook";
 import Input from "../../../../../ui/Input/Input";
 import Button from "../../../../../ui/Button/Button";
 import { $authHost } from "../../../../AuthPage/modules/services/http.user";
+import { createHabit } from "../../services/habitAPI";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../../store/store";
+import { addHabit, fetchHabits } from "../../../../../store/habitsSlice";
 
 interface IHabit {
     id: string
@@ -14,22 +18,27 @@ interface IHabit {
 const Habits:FC = ():JSX.Element => {
 
     const [name, setName] = useState<string>('');
-    const [date, setDate] = useState<string>(new Date().toString());
 
-    const [dates, setDates] = useState<IHabit[]>([]);
+    const dispatch = useDispatch<AppDispatch>();
 
     const userId = useTypedSelector(state => state.user.user?.id)
-    
+    const habits = useTypedSelector(state => state.habits.habits);
+
     useEffect(() => {
-        $authHost.get<any, Promise<IHabit[]>>('/habits?userId=1')
-            .then((data) => {
-                data.json();
-            })
+        if (typeof userId !== 'undefined') {
+            dispatch(fetchHabits(userId));
+        }
     }, [])
 
-    const addHabit = async () => {
-        await $authHost.post('/habits', { name, dates: [date], userId })
+    const addNewHabit = async () => {
+        await createHabit({name: name, dates: [], userId: userId || ''})
+            .then((data) => {
+                dispatch(addHabit(data));
+            })
     }
+
+    console.log(habits);
+    
 
     return (
         <>
@@ -39,20 +48,27 @@ const Habits:FC = ():JSX.Element => {
             <div>
                 Month: {format(new Date(), 'MMMM')}
             </div>
-                {/* {dates.map(date => {
+                {habits && habits.map(habit => {
                     return (
-                        <div>
-                            {date.name}
-                        </div>
+                        <Fragment key={habit.id}>
+                            <div>{habit.name}</div>
+                            <div>{habit.dates?.map((date) => {
+                                return (
+                                    <div>
+                                        {new Date(date).toDateString()}
+                                    </div>
+                                )
+                            })}</div>
+                        </Fragment>
+                        
                     )
-                })} */}
+                })}
             <div>
 
             </div>
             <div>
                 <Input type="text" onChange={(e) => setName(e.target.value)} value={name} />
-                <Input type="date" onChange={(e) => setDate(new Date(e.target.value).toString())} value={date}/>
-                <Button onClick={addHabit}> 
+                <Button onClick={addNewHabit}> 
                     SEND
                 </Button>
             </div>
