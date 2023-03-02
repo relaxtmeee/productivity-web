@@ -9,12 +9,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../../store/store";
 import { addHabit, fetchHabits } from "../../../../../store/habitsSlice";
 
-interface IHabit {
-    id: string
-    name: string
-    date: Date[]
-}
-
 const Habits:FC = ():JSX.Element => {
 
     const [name, setName] = useState<string>('');
@@ -37,9 +31,6 @@ const Habits:FC = ():JSX.Element => {
             })
     }
 
-    console.log(habits);
-    
-
     return (
         <>
             <div>
@@ -48,21 +39,7 @@ const Habits:FC = ():JSX.Element => {
             <div>
                 Month: {format(new Date(), 'MMMM')}
             </div>
-                {habits && habits.map(habit => {
-                    return (
-                        <Fragment key={habit.id}>
-                            <div>{habit.name}</div>
-                            <div>{habit.dates?.map((date) => {
-                                return (
-                                    <div>
-                                        {new Date(date).toDateString()}
-                                    </div>
-                                )
-                            })}</div>
-                        </Fragment>
-                        
-                    )
-                })}
+            
             <div>
 
             </div>
