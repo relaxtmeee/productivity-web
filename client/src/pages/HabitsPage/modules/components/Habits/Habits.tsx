@@ -9,9 +9,13 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../../store/store";
 import { addHabit, fetchHabits } from "../../../../../store/habitsSlice";
 
-const Habits:FC = ():JSX.Element => {
+import styles from './Habit.module.css';
+import { IHabit } from "../../interfaces/Habits.interfaces";
 
-    const [name, setName] = useState<string>('');
+import getDaysInMonth from "date-fns/getDaysInMonth";
+import setDate  from "date-fns/setDate";
+
+const Habits:FC = ():JSX.Element => {
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -24,33 +28,61 @@ const Habits:FC = ():JSX.Element => {
         }
     }, [])
 
-    const addNewHabit = async () => {
-        await createHabit({name: name, dates: [], userId: userId || ''})
-            .then((data) => {
-                dispatch(addHabit(data));
-            })
+    const setPerformance = (id: number, habit: IHabit) => {
+
+        const date = setDate(new Date(), id + 1)
+        console.log(date.toUTCString());
+        console.log(date.getUTCMilliseconds());
+        console.log(date.toISOString());
+        
+        
+        
+        // нужно добавить метод в API patch для обновления дат в привычке
+        // 
     }
 
     return (
         <>
-            <div>
-                Habits
-            </div>
-            <div>
-                Month: {format(new Date(), 'MMMM')}
-            </div>
-            
-            <div>
-
-            </div>
-            <div>
-                <Input type="text" onChange={(e) => setName(e.target.value)} value={name} />
-                <Button onClick={addNewHabit}> 
-                    SEND
-                </Button>
-            </div>
+            <thead>
+                <tr>
+                    <th>
+                        Habits
+                    </th>
+                    <th>
+                        Month: {format(new Date(), 'MMMM')}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {habits?.map(habit => {
+                    return (
+                        <tr key={habit.id} id={habit.id}>
+                            <td>{habit.name}</td>
+                            <td>
+                                {[...Array(getDaysInMonth(new Date()))].map((date, i) => {
+                                    return (
+                                        <input onClick={() => setPerformance(i, habit)} key={i} id={`${i}`} type='checkbox' className={styles.day}/>
+                                    )
+                                })}
+                            </td>
+                        
+                        </tr>
+                    )
+                })}
+            </tbody>
         </>
     );
 };
+
+
+// const constructorDate = () => {
+
+//     const daysInMonth = getDaysInMonth(new Date());
+
+//     return (
+        
+//     )
+// }
+
 
 export default Habits;

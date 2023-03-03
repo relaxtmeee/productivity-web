@@ -20,6 +20,22 @@ class HabitController {
         const habit = await Habit.destroy({where: {id}})
         return res.json(habit);
     }
+
+    async patchAddDate (req, res, next) {
+        const { id, date } = req.body;
+        const habit = await Habit.findOne({where: {id}});
+        const updatHabit = await habit.update({dates: [...habit.dates , new Date(date)]});
+        return res.json(updatHabit);
+    }
+
+    async patchDeleteDate (req, res, next) {
+        const { id } = req.params;
+        const { date } = req.body;
+
+        const habit = await Habit.findOne({where: {id}});
+        const updatHabit = await habit.update({dates: habit.dates.filter(dat => new Date(dat).toISOString() != new Date(date).toISOString())});
+        return res.json(updatHabit);
+    }
 }
 
 module.exports = new HabitController();

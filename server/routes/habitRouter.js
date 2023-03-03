@@ -7,5 +7,7 @@ const router = new Router();
 router.post('/', authMiddleware, habitController.create);
 router.get('/', authMiddleware, habitController.getAll);
 router.delete('/:id', authMiddleware, habitController.deleteOne);
+router.patch('/', habitController.patchAddDate);
+router.patch('/:id', habitController.patchDeleteDate);
 
 module.exports = router;
