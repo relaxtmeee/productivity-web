@@ -1,0 +1,15 @@
+.row {
+
+}
+
+.day {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background: rgb(176, 176, 112);
+    margin: 5px;
+}
+.day > input {
+    opacity: 0;
+}

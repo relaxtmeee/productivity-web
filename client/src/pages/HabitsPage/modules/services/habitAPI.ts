@@ -23,4 +23,28 @@ export async function createHabit(post: IHabit) {
       return error.message
     }   
   }
+
+
+}
+
+export async function patchAddDateToHabit(habitId: string, date: Date) {
+  try {
+    const { data } = await $authHost.patch<IHabit>(process.env.REACT_APP_API + `/habits`, date);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return error.message
+    }   
+  }
+}
+
+export async function patchDeleteDateFromHabit(habitId: string, date: Date) {
+  try {
+    const { data } = await $authHost.patch<IHabit>(process.env.REACT_APP_API + `/habits/${habitId}`, date);
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return error.message
+    }   
+  }
 }

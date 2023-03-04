@@ -45,7 +45,9 @@ const Layout = ({children}: ILayout):JSX.Element => {
                     className={styles.body}
 
                 >
-                    {children}
+                    <div className={styles.gradient}>
+                        {children}
+                    </div>
                 </main>
                 <Footer className={styles.footer}/>
             </div>

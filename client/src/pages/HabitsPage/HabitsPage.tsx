@@ -14,8 +14,7 @@ const HabitsPage = () => {
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const userId = useTypedSelector(state => state.user.user?.id)
-    const habits = useTypedSelector(state => state.habits.habits);
+    const userId = useTypedSelector(state => state.user.user?.id);
     
     const addNewHabit = async () => {
         await createHabit({name: name, dates: [], userId: userId || ''})

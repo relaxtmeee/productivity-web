@@ -9,13 +9,15 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../../store/store";
 import { addHabit, fetchHabits } from "../../../../../store/habitsSlice";
 
-import styles from './Habit.module.css';
+import styles from './Habits.module.css';
 import { IHabit } from "../../interfaces/Habits.interfaces";
 
 import getDaysInMonth from "date-fns/getDaysInMonth";
 import setDate  from "date-fns/setDate";
 
 const Habits:FC = ():JSX.Element => {
+
+    const [currentDate, setCurrentDate] = useState<string>(format(new Date(), 'MMMM yyyy'));
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -26,19 +28,15 @@ const Habits:FC = ():JSX.Element => {
         if (typeof userId !== 'undefined') {
             dispatch(fetchHabits(userId));
         }
-    }, [])
+    }, []);
 
-    const setPerformance = (id: number, habit: IHabit) => {
+    const setPerformance = (e: React.MouseEvent<HTMLLabelElement, MouseEvent> ,id: number, habit: IHabit) => {
 
-        const date = setDate(new Date(), id + 1)
-        console.log(date.toUTCString());
-        console.log(date.getUTCMilliseconds());
-        console.log(date.toISOString());
-        
+        const date = setDate(new Date(currentDate), id + 1); // получение выбранной даты
+        console.log((e.target as HTMLInputElement).checked);
         
         
         // нужно добавить метод в API patch для обновления дат в привычке
-        // 
     }
 
     return (
@@ -49,23 +47,24 @@ const Habits:FC = ():JSX.Element => {
                         Habits
                     </th>
                     <th>
-                        Month: {format(new Date(), 'MMMM')}
+                        Month: {currentDate}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {habits?.map(habit => {
                     return (
-                        <tr key={habit.id} id={habit.id}>
+                        <tr key={habit.id} id={habit.id} className={styles.row}>
                             <td>{habit.name}</td>
                             <td>
                                 {[...Array(getDaysInMonth(new Date()))].map((date, i) => {
                                     return (
-                                        <input onClick={() => setPerformance(i, habit)} key={i} id={`${i}`} type='checkbox' className={styles.day}/>
+                                        <label className={styles.day} onClick={(e) => setPerformance(e, i, habit)} id={`${i}`} key={i}>
+                                            <input type='checkbox'/>
+                                        </label>
                                     )
                                 })}
                             </td>
-                        
                         </tr>
                     )
                 })}
@@ -73,16 +72,5 @@ const Habits:FC = ():JSX.Element => {
         </>
     );
 };
-
-
-// const constructorDate = () => {
-
-//     const daysInMonth = getDaysInMonth(new Date());
-
-//     return (
-        
-//     )
-// }
-
 
 export default Habits;

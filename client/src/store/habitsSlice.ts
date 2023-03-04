@@ -28,7 +28,8 @@ const habitsSlice = createSlice({
     name: 'habits',
     initialState,
     reducers: {
-        addHabit: (state, action) => {state.habits?.push(action.payload)}
+        addHabit: (state, action) => {state.habits?.push(action.payload)},
+        updateDatesHabit: (state, action) => {state.habits?.map(habit => habit.id === action.payload.id ? action.payload : habit)}
     },
     extraReducers: (builder) => {
         builder 
@@ -46,6 +47,6 @@ const habitsSlice = createSlice({
 
 const {actions, reducer} = habitsSlice;
 
-export const { addHabit } = actions;
+export const { addHabit, updateDatesHabit } = actions;
 
 export default reducer;
