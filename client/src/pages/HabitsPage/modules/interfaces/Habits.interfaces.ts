@@ -1,6 +1,6 @@
 export interface IHabit {
     id?: string,
-    dates?: Date[],
+    dates?: string[],
     name: string,
     userId: string
 }

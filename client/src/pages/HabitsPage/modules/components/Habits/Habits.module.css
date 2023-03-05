@@ -1,7 +1,3 @@
-.row {
-
-}
-
 .day {
     display: inline-block;
     width: 20px;
@@ -10,6 +6,11 @@
     background: rgb(176, 176, 112);
     margin: 5px;
 }
+
 .day > input {
     opacity: 0;
+}
+
+.acitve {
+    background: red;
 }

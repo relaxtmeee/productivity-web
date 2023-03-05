@@ -25,18 +25,18 @@ const HabitsPage = () => {
     
     return (
         <>  
-        <table className={styles.layout}>
-            <Habits/>
-        </table>
-        <div>
-            Новая привычка
-        </div>
-        <div>
-            <Input type="text" onChange={(e) => setName(e.target.value)} value={name} />
-            <Button onClick={addNewHabit}> 
-                SEND
-            </Button>
-        </div>
+            <table className={styles.layout}>
+                <Habits/>
+            </table>
+            <div>
+                Новая привычка
+            </div>
+            <div>
+                <Input type="text" onChange={(e) => setName(e.target.value)} value={name} />
+                <Button onClick={addNewHabit}> 
+                    SEND
+                </Button>
+            </div>
         </>
         
        
