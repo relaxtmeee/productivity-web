@@ -11,6 +11,10 @@
     opacity: 0;
 }
 
-.acitve {
+.active {
     background: red;
+}
+
+.one {
+    width: 30px;
 }

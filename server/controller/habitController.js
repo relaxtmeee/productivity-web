@@ -23,10 +23,11 @@ class HabitController {
 
     async patchAddDate (req, res, next) {
         const { habitId, date } = req.body;
-        console.log('817943651873465807136508716450813647801760'+ date);
+
         const habit = await Habit.findOne({where: {id: habitId}});
-        const updatHabit = await habit.update({dates: [...habit.dates , date]});
-        return res.json(updatHabit);
+        const updateHabit = await habit.update({dates: [...habit.dates , new Date(date)]})
+
+        return res.json(updateHabit);
     }
 
     async patchDeleteDate (req, res, next) {

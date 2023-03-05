@@ -5,7 +5,19 @@ export async function getHabits(userId: string): Promise<IHabit[] | undefined | 
     try {
       if(typeof userId !== "undefined") {
         const { data } = await $authHost.get<IHabit[]>(process.env.REACT_APP_API + `/habits/?userId=${userId}`);
-        return data;
+
+        const newData = data.map(habit => {
+
+          habit.dates = habit.dates?.map(date => {
+            return (
+              new Date(date).toLocaleDateString()
+            )
+          })
+
+          return habit
+        })
+
+        return newData
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -27,9 +39,9 @@ export async function createHabit(post: IHabit) {
 
 }
 
-export async function patchAddDateToHabit(habitId: string, date: Date) {
+export async function patchAddDateToHabit(habitId: string, date: string) {
   try {
-    const { data } = await $authHost.patch<IHabit>(process.env.REACT_APP_API + `/habits`, {habitId, date});
+    const { data } = await $authHost.patch<IHabit>(process.env.REACT_APP_API + `/habits`, {habitId, date});    
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -38,7 +50,7 @@ export async function patchAddDateToHabit(habitId: string, date: Date) {
   }
 }
 
-export async function patchDeleteDateFromHabit(habitId: string, date: Date) {
+export async function patchDeleteDateFromHabit(habitId: string, date: string) {
   try {
     const { data } = await $authHost.patch<IHabit>(process.env.REACT_APP_API + `/habits/${habitId}`, date);
     return data;

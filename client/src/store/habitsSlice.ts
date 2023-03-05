@@ -4,12 +4,14 @@ import { getHabits } from "../pages/HabitsPage/modules/services/habitAPI";
 
 export interface IHabits {
     habits: IHabit[] | undefined
-    habitsLoadingStatus: 'idle' | 'pending' | 'succeeded' | 'failed'
+    habitsLoadingStatus: 'idle' | 'pending' | 'succeeded' | 'failed',
+    habitDateStatus: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
 const initialState = {
     habits: [],
-    habitsLoadingStatus: 'idle'
+    habitsLoadingStatus: 'idle',
+    habitDateStatus: 'idle'
 } as IHabits
 
 export const fetchHabits = createAsyncThunk(
@@ -29,7 +31,11 @@ const habitsSlice = createSlice({
     initialState,
     reducers: {
         addHabit: (state, action) => {state.habits?.push(action.payload)},
-        updateDatesHabit: (state, action) => {state.habits?.map(habit => habit.id === action.payload.id ? action.payload : habit)}
+        updatingDatesHabit: (state) => {state.habitDateStatus = 'pending'},
+        updateDatesHabit: (state, action) => {
+            state.habits?.map(habit => habit.id === action.payload.id ? action.payload : habit);
+            state.habitDateStatus = 'idle'
+        }
     },
     extraReducers: (builder) => {
         builder 
@@ -47,6 +53,6 @@ const habitsSlice = createSlice({
 
 const {actions, reducer} = habitsSlice;
 
-export const { addHabit, updateDatesHabit } = actions;
+export const { addHabit, updateDatesHabit, updatingDatesHabit } = actions;
 
 export default reducer;
